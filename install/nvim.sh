@@ -1,5 +1,5 @@
 # Add PPA for Unstable (nightly)
-sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt update
-sudo apt-get install software-properties-common
-sudo apt install neovim
+add-apt-repository -y ppa:neovim-ppa/unstable
+apt -y update
+apt-get -y install software-properties-common
+apt -y install neovim
