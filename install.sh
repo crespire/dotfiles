@@ -41,11 +41,12 @@ DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 # Once we have some utilities we can add them to ~/.dotfiles/bin as executable
 # PATH="$DOTFILES_DIR/bin:$PATH"
 
+# Set up links
+ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
+
 # Install some packages
 . "$DOTFILES_DIR/install/nvim.sh"
 . "$DOTFILES_DIR/install/rbenv.sh"
 . "$DOTFILES_DIR/install/nvm.sh"
-
-ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
-ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
-ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
