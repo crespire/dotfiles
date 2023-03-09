@@ -1,4 +1,4 @@
-printf "Adding aliases..."
+printf "Adding aliases...\n"
 alias vim='nvim'
 alias fm='thunar'
 
