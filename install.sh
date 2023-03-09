@@ -47,8 +47,8 @@ ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 
 # Install some packages
-. "$DOTFILES_DIR/install/nvim.sh"
 . "$DOTFILES_DIR/install/rbenv.sh"
 . "$DOTFILES_DIR/install/nvm.sh"
+. "$DOTFILES_DIR/install/nvim.sh"
 . "$DOTFILES_DIR/langs/ruby.sh"
 . "$DOTFILES_DIR/langs/node.sh"

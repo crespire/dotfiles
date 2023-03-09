@@ -1,2 +1,2 @@
-# Alias fm to thunar, xubuntu's file manager
+# Alias for file manager
 alias fm='thunar'
