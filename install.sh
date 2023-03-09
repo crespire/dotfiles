@@ -18,6 +18,8 @@ export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR
 DOTFILES_DIR="$HOME/.dotfiles"
 DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 
+. "$DOTFILES_DIR/git/options.sh"
+
 # Set up Bitwarden env vars if not present
 # Commented as I'm not yet ready to configure this
 #
