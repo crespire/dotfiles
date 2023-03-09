@@ -13,7 +13,6 @@ set -eEuo pipefail
 
 # Install network fetch util
 sudo apt -y install curl
-sudo apt -y install git && git config --global init.defaultBranch main
 
 export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR
 DOTFILES_DIR="$HOME/.dotfiles"
