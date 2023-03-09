@@ -13,6 +13,7 @@ set -eEuo pipefail
 
 # Install network fetch util
 sudo apt -y install curl
+sudo apt -y install git && git config --global init.defaultBranch main
 
 export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR
 DOTFILES_DIR="$HOME/.dotfiles"
@@ -49,6 +50,7 @@ ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 . "$DOTFILES_DIR/install/rbenv.sh"
 . "$DOTFILES_DIR/install/nvm.sh"
 . "$DOTFILES_DIR/install/nvim.sh"
-. "$HOME/.bashrc"
+
+echo "Installing Langs..."
 . "$DOTFILES_DIR/langs/ruby.sh"
 . "$DOTFILES_DIR/langs/node.sh"
