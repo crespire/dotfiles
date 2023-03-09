@@ -52,6 +52,8 @@ ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 ln -sfv "$DOTFILES_DIR/langs/.default-gems" "$HOME"
 
+source "$HOME/.bashrc"
+
 # Install some packages
 . "$DOTFILES_DIR/install/utils.sh"
 . "$DOTFILES_DIR/install/nvim.sh"
