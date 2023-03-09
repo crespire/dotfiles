@@ -52,5 +52,5 @@ ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 # Install some packages
 . "$DOTFILES_DIR/install/utils.sh"
 . "$DOTFILES_DIR/install/nvim.sh"
-. "$DOTFILES_DIR/install/adsf_install.sh"
+. "$DOTFILES_DIR/install/asdf_install.sh"
 
