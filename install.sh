@@ -12,7 +12,7 @@ set -eEuo pipefail
 #     success.
 
 # Install network fetch util
-sudo apt install curl
+sudo apt -y install curl
 
 export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR
 DOTFILES_DIR="$HOME/.dotfiles"
