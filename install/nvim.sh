@@ -3,4 +3,4 @@ sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo apt -y install neovim
 
 . "$HOME/.bashrc"
-$ nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
