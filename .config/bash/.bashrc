@@ -118,14 +118,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# rbenv path changes
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(~/.rbenv/bin/rbenv init -)"
-
-# nvm path changes
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# asdf
+. "$HOME/.asdf/asdf.sh"
+. "$HOME/.asdf/completions/asdf.bash"
 
 # gcloud
 export PATH=$PATH:/usr/local/go/binscript_link="$( command readlink "$BASH_SOURCE" )" || script_link="$BASH_SOURCE"

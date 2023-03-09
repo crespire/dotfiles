@@ -45,15 +45,12 @@ DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 
 # Set up links
 ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
+ln -sfv "$DOTFILES_DIR/langs/.default-gems" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 
 # Install some packages
 . "$DOTFILES_DIR/install/utils.sh"
-. "$DOTFILES_DIR/install/rbenv.sh"
-. "$DOTFILES_DIR/install/nvm.sh"
 . "$DOTFILES_DIR/install/nvim.sh"
+. "$DOTFILES_DIR/install/adsf_install.sh"
 
-printf "\nInstalling Langs...\n"
-source "~/.bashrc"
-. "$DOTFILES_DIR/langs/ruby.sh"
-. "$DOTFILES_DIR/langs/node.sh"
