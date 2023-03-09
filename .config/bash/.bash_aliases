@@ -1,4 +1,5 @@
-printf "Adding aliases...\n"
+#!/bin/bash
+
 alias vim='nvim'
 alias fm='thunar'
 
