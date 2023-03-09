@@ -48,6 +48,8 @@ DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 
 # Set up links
 ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/bash/.bash_aliases" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 ln -sfv "$DOTFILES_DIR/langs/.default-gems" "$HOME"
