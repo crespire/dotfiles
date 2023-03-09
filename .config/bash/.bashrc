@@ -139,3 +139,5 @@ export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 
 # Rust/Cargo
 source "$HOME/.cargo/env"
+
+set -o vi
