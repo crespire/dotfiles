@@ -18,7 +18,7 @@ printf "Let's install some stuff..."
 sudo apt -y install curl
 
 export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR
-DOTFILES_DIR="$HOME/dotfiles"
+DOTFILES_DIR="$HOME/.dotfiles"
 # DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 
 . "$DOTFILES_DIR/git/options.sh"
