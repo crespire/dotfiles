@@ -15,3 +15,5 @@ asdf global ruby 3.1.3
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf install nodejs 18.15.0
 asdf global nodejs 18.15.0
+
+npm install -g yarn
