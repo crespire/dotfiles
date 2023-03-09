@@ -61,3 +61,5 @@ source "$HOME/.bashrc"
 . "$DOTFILES_DIR/install/nvim.sh"
 . "$DOTFILES_DIR/install/asdf_install.sh"
 
+
+set -o vi
