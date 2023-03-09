@@ -54,5 +54,6 @@ ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 . "$DOTFILES_DIR/install/nvim.sh"
 
 printf "\nInstalling Langs...\n"
+source "~/.bashrc"
 . "$DOTFILES_DIR/langs/ruby.sh"
 . "$DOTFILES_DIR/langs/node.sh"
