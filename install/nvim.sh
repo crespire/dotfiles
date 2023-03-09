@@ -4,4 +4,5 @@ sudo apt -y update
 sudo apt-get -y install software-properties-common
 sudo apt -y install neovim
 
-nvim --headless -c 'PackerSync'
+. "$HOME/.bashrc"
+$ nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
