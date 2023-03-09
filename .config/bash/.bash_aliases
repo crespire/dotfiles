@@ -1,2 +1,2 @@
-# Alias for file manager
+alias vim='nvim'
 alias fm='thunar'
