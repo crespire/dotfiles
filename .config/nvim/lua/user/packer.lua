@@ -12,7 +12,9 @@ local ensure_packer = function()
 end
 
 local packer_bootstrap = ensure_packer()
-print('Packer Bootstrap: '..tostring(packer_bootstrap))
+if packer_bootstrap then 
+  print('Bootstrapping Packer...')
+end
 
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
