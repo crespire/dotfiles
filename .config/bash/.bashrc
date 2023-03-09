@@ -120,7 +120,7 @@ fi
 
 # rbenv path changes
 export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+eval "$(~/.rbenv/bin/rbenv init -)"
 
 # nvm path changes
 export NVM_DIR="$HOME/.nvm"
