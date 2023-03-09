@@ -11,6 +11,9 @@ set -eEuo pipefail
 #     with non-zero status, returns 0 if all commands in the pipeline are a
 #     success.
 
+
+printf "Let's install some stuff..."
+
 # Install network fetch util
 sudo apt -y install curl
 
@@ -46,8 +49,8 @@ DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 # Set up links
 ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
-ln -sfv "$DOTFILES_DIR/langs/.default-gems" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
+ln -sfv "$DOTFILES_DIR/langs/.default-gems" "$HOME"
 
 # Install some packages
 . "$DOTFILES_DIR/install/utils.sh"
