@@ -1,10 +1,15 @@
+local status_ok, ufo = pcall(require, 'ufo')
+if not status_ok then
+  return
+end
+
 vim.o.foldcolumn = '1' -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
-vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+vim.keymap.set('n', 'zR', ufo.openAllFolds)
+vim.keymap.set('n', 'zM', ufo.closeAllFolds)
 
 -- handler function for virtualText
 local trailingNumbers = function(virtText, lnum, endLnum, width, truncate)
@@ -38,7 +43,7 @@ end
 -- global handler
 -- `handler` is the 2nd parameter of `setFoldVirtTextHandler`,
 -- check out `./lua/ufo.lua` and search `setFoldVirtTextHandler` for detail.
-require('ufo').setup({
+ufo.setup({
     fold_virt_text_handler = trailingNumbers,
     -- buffer scope handler
     -- will override global handler if it is existed
