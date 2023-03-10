@@ -3,6 +3,9 @@ if not status_ok then
   return
 end
 
+local status_wrap, _ = pcall(require, 'wrapping')
+local line_x = status_wrap and { 'encoding', 'filetype', "require('wrapping').get_current_mode()"} or {'encoding', 'filetype'};
+
 lualine.setup {
   options = {
     icons_enabled = true,
@@ -26,7 +29,7 @@ lualine.setup {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
     lualine_c = {'filename'},
-    lualine_x = {'encoding', 'filetype'},
+    lualine_x = line_x,
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },

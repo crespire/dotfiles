@@ -12,7 +12,7 @@ local ensure_packer = function()
 end
 
 local packer_bootstrap = ensure_packer()
-if packer_bootstrap then 
+if packer_bootstrap then
   print('Bootstrapping Packer...')
 end
 
@@ -100,6 +100,8 @@ return require('packer').startup(function(use)
   use 'folke/lsp-colors.nvim'
 
   use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
+
+  use { 'andrewferrier/wrapping.nvim' }
 
   if packer_boostrap then
     require('packer').sync()
