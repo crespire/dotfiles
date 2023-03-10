@@ -4,4 +4,17 @@ if not status_ok then
 end
 
 lsp.preset('recommended')
+
+-- Configure LTeX
+lsp.configure('ltex', {
+  settings = {
+    ltex = {
+      disabledRules = {
+        ['en-US'] = { 'PROFANITY' },
+        ['en-GB'] = { 'PROFANITY' }
+      }
+    }
+  }
+})
+
 lsp.setup()
