@@ -10,9 +10,8 @@ lsp.configure('ltex', {
   settings = {
     ltex = {
       disabledRules = {
-        ['en-US'] = { 'PROFANITY' },
-        ['en-GB'] = { 'PROFANITY' }
-      }
+        ['en'] = { 'PROFANITY' },
+      },
     }
   }
 })
