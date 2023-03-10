@@ -5,6 +5,21 @@ end
 
 vim.opt.signcolumn = 'yes'
 
+local user_dict = {
+  ['en-US'] = {vim.fn.expand('$HOME/.config/nvim/spell/en-us.conf')}
+}
+
+local function readFiles(files)
+    local dict = {}
+    for _,file in ipairs(files) do
+        local f = io.open(file, "r")
+        for l in f:lines() do
+            table.insert(dict, l)
+        end
+    end
+    return dict
+end
+
 lsp.preset('recommended')
 
 -- Configure LTeX
@@ -13,8 +28,11 @@ lsp.configure('ltex', {
     ltex = {
       disabledRules = {
         ['en-US'] = { 'PROFANITY' },
-      }
-    }
+      },
+      dictionary = {
+        ['en-US'] = readFiles(user_dict['en-US'] or {}),
+      },
+    },
   }
 })
 
