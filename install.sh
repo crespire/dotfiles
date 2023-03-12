@@ -40,10 +40,13 @@ DOTFILES_DIR="$HOME/.dotfiles"
 # PATH="$DOTFILES_DIR/bin:$PATH"
 
 # Set up links
-ln -sfv "$DOTFILES_DIR/.config/bash" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/bash/.bash_aliases" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
-ln -sfv "$DOTFILES_DIR/lang-defaults" "$HOME"
+ln -sfv "$DOTFILES_DIR/lang-defaults/.default-gems" "$HOME"
+ln -sfv "$DOTFILES_DIR/lang-defaults/.default-npm-packages"
 
 source "$HOME/.bashrc"
 
@@ -52,5 +55,5 @@ source "$HOME/.bashrc"
 . "$DOTFILES_DIR/install/nvim.sh"
 . "$DOTFILES_DIR/install/asdf_install.sh"
 
-# Sets vi movement for terminal
+# Set vi motions in term
 set -o vi
