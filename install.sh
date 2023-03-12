@@ -46,7 +46,7 @@ ln -sfv "$DOTFILES_DIR/.config/bash/.bash_aliases" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
 ln -sfv "$DOTFILES_DIR/lang-defaults/.default-gems" "$HOME"
-ln -sfv "$DOTFILES_DIR/lang-defaults/.default-npm-packages"
+ln -sfv "$DOTFILES_DIR/lang-defaults/.default-npm-packages" "$HOME"
 
 source "$HOME/.bashrc"
 
