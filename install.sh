@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # Set failure mode
 set -eEuo pipefail
@@ -24,16 +24,16 @@ DOTFILES_DIR="$HOME/.dotfiles"
 . "$DOTFILES_DIR/git/options.sh"
 
 # Set up Bitwarden env vars if not present
-if [[ -z "${BW_CLIENTID}" ]]; then
-  echo "Bitwarden client id: "
-  read -n BW_CLIENTID
-  export BW_CLIENTID="$BW_CLIENTID"
-fi
-if [[ -z "${BW_CLIENTSECRET}" ]]; then
-  echo "Bitwarden client secret: "
-  read -n BW_CLIENTSECRET
-  export BW_CLIENTSECRET="$BW_CLIENTSECRET"
-fi
+#if [[ -z "${BW_CLIENTID}" ]]; then
+#  echo "Bitwarden client id: "
+#  read -n BW_CLIENTID
+#  export BW_CLIENTID="$BW_CLIENTID"
+#fi
+#if [[ -z "${BW_CLIENTSECRET}" ]]; then
+#  echo "Bitwarden client secret: "
+#  read -n BW_CLIENTSECRET
+#  export BW_CLIENTSECRET="$BW_CLIENTSECRET"
+#fi
 
 # Make utilities available
 # Once we have some utilities we can add them to ~/.dotfiles/bin as executable
