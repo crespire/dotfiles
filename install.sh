@@ -40,10 +40,10 @@ DOTFILES_DIR="$HOME/.dotfiles"
 # PATH="$DOTFILES_DIR/bin:$PATH"
 
 # Set up links
-ln -sfv "$DOTFILES_DIR/.config/bash/*" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/bash" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/nvim" "$HOME/.config"
-ln -sfv "$DOTFILES_DIR/lang-defaults/*" "$HOME"
+ln -sfv "$DOTFILES_DIR/lang-defaults" "$HOME"
 
 source "$HOME/.bashrc"
 
