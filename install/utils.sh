@@ -6,3 +6,6 @@ sudo apt-get -y install build-essential
 sudo apt-get -y install libssl-dev
 sudo apt-get -y install zlib1g zlib1g-dev
 sudo apt-get -y install ripgrep
+
+# Go Lint
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
