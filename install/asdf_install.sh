@@ -20,3 +20,8 @@ asdf global nodejs 18.15.0
 asdf plugin add yarn https://github.com/twuni/asdf-yarn
 asdf install yarn latest
 asdf global yarn latest
+
+# Go
+asdf plugin add golang https://github.com/kennyp/asdf-golang.github
+asdf install golang latest
+asdf global golang latest
