@@ -13,6 +13,7 @@ echo "Downloading JetBrains Mono..."
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/JetBrainsMono.zip
 unzip JetBrainsMono.zip -d ~/.fonts
 fc-cache -fv
+rm JetBrainsMono.zip
 echo "Installed JetBrains Mono!"
 
 # Go Lint
