@@ -1,0 +1,18 @@
+[user]
+	name = crespire
+	email = hello@crespire.dev
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID1yzSn7L1JzewAKjgA7RZ/wQcWSua0FqCUHmgmHeIkw crespire@dev-vm li.simmon@gmail.com
+[init]
+	defaultBranch = main
+[color]
+	ui = auto
+[core]
+	editor = vim
+[help]
+  autocorrect = 30
+[push]
+  autoSetupRemote = true
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
