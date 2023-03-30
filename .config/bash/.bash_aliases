@@ -5,6 +5,7 @@ alias vim='nvim'
 alias fm='thunar'
 
 # Utility
+alias ls='ls -ahlH --color=auto'
 alias reload=". ~/.bashrc && echo 'Reloaded bash config from ~/.bashrc'"
 alias dotfiles="cd ~/.dotfiles"
 
