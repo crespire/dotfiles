@@ -18,4 +18,12 @@ lsp.configure('ltex', {
   }
 })
 
+lsp.configure('yamlls', {
+  settings = {
+    yaml = {
+      keyOrdering = false,
+    }
+  }
+})
+
 lsp.setup()
