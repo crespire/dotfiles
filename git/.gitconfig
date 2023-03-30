@@ -16,3 +16,8 @@
 	format = ssh
 [commit]
 	gpgsign = true
+[alias]
+  last = log -1 HEAD
+  b = branch
+  s = status
+  unstage = reset HEAD --
