@@ -5,7 +5,7 @@ alias vim='nvim'
 alias fm='thunar'
 
 # Utility
-alias reload=". ~/.bashrc && echo 'Reloaded bash config from ~/.bashrc\n'"
+alias reload=". ~/.bashrc && echo 'Reloaded bash config from ~/.bashrc'"
 alias dotfiles="cd ~/.dotfiles"
 
 # Git Clean Branches
