@@ -10,9 +10,8 @@ alias reload=". ~/.bashrc && echo 'Reloaded bash config from ~/.bashrc'"
 alias dotfiles="cd ~/.dotfiles"
 
 # Git aliases
-# Use both "git branch clean" and "git clean branches"
-alias gcb='git branch --merged | grep -v 'main$' | xargs git branch -d 2>/dev/null'
-alias gbc='gcb'
+# git branch clean - cleans up all branches merged into main
+alias gbc='git branch --merged | grep -v 'main$' | xargs git branch -d 2>/dev/null'
 
 # Heroku Local
 alias hl='heroku local'
