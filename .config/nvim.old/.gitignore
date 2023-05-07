@@ -1,0 +1,6 @@
+# Ignore packer_compiled.lua
+packer_compiled.lua
+
+# ignore undo, but keep it for other setups
+undodir/*
+!undodir/.keep
