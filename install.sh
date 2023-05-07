@@ -11,7 +11,6 @@ set -eEuo pipefail
 #     with non-zero status, returns 0 if all commands in the pipeline are a
 #     success.
 
-
 printf "Let's install some stuff..."
 
 # Install network fetch util
@@ -20,8 +19,6 @@ sudo apt -y install curl
 export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR
 DOTFILES_DIR="$HOME/.dotfiles"
 # DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
-
-. "$DOTFILES_DIR/git/options.sh"
 
 # Set up Bitwarden env vars if not present
 #if [[ -z "${BW_CLIENTID}" ]]; then
