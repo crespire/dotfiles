@@ -18,6 +18,6 @@ alias hl='heroku local'
 alias hlc='heroku local:run rails c'
 alias hldbm='heroku local:run rails db:migrate'
 
-# Tail dev logs in Rails project root
+# Tail logs in Rails project root
 alias devlogs='tail -f log/development.log'
-
+alias testlogs='tail -f log/test.log'
