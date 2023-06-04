@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -d ~/.asdf ]; then
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.2
+	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.2
 fi
 
 . $HOME/.asdf/asdf.sh
@@ -22,6 +22,6 @@ asdf install yarn latest
 asdf global yarn latest
 
 # Go
-asdf plugin add golang https://github.com/kennyp/asdf-golang.github
+asdf plugin add golang https://github.com/kennyp/asdf-golang
 asdf install golang latest
 asdf global golang latest
