@@ -1,2 +1,6 @@
 Style/HashSyntax:
   EnforcedShorthandSyntax: 'never'
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
