@@ -141,3 +141,5 @@ export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 source "$HOME/.cargo/env"
 
 set -o vi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
