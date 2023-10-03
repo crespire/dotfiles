@@ -4,3 +4,7 @@ Style/HashSyntax:
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
+
+Style/FormatStringToken:
+  Exclude:
+    - "lib/**/*"
