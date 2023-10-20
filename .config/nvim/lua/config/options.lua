@@ -5,6 +5,6 @@
 local vim = vim
 local opt = vim.opt
 
-opt.foldmethod = "manual"
+opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.conceallevel = 0
+opt.foldenable = false
