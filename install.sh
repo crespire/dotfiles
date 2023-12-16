@@ -16,8 +16,9 @@ printf "Let's install some stuff..."
 # Install network fetch util
 sudo apt -y install curl
 
-export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR
 DOTFILES_DIR="$HOME/.dotfiles"
+ZDOTDIR="$HOME/.dotfiles/.config/zsh/"
+export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR ZDOTDIR
 # DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 
 # Set up Bitwarden env vars if not present
@@ -37,9 +38,12 @@ DOTFILES_DIR="$HOME/.dotfiles"
 # PATH="$DOTFILES_DIR/bin:$PATH"
 
 # Set up links
-ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
-ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
-ln -sfv "$DOTFILES_DIR/.config/bash/.bash_aliases" "$HOME"
+# Switch to zsh on all OSes
+# ln -sfv "$DOTFILES_DIR/.config/bash/.bashrc" "$HOME"
+# ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
+# ln -sfv "$DOTFILES_DIR/.config/bash/.bash_aliases" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/zsh/.zshrc" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/zsh/.zsh_aliases" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.rubocop.yml" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config" "$HOME/.config"
@@ -54,6 +58,3 @@ source "$HOME/.bashrc"
 . "$DOTFILES_DIR/install/utils.sh"
 . "$DOTFILES_DIR/install/nvim.sh"
 . "$DOTFILES_DIR/install/asdf_install.sh"
-
-# Set vi motions in term
-set -o vi

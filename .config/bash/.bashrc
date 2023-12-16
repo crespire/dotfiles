@@ -139,6 +139,7 @@ export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 # Rust/Cargo
 source "$HOME/.cargo/env"
 
+# Sets vi motions in terminal
 set -o vi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

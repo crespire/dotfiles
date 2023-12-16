@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Program aliases
+alias vim='nvim'
+
+# Utility
+alias ls='ls -ahlH --color=auto'
+alias dotfiles="cd ~/.dotfiles"
+
+# Git aliases
+# git branch clean - cleans up all branches merged into main
+alias gbc='git branch --merged | grep -v 'main$' | xargs git branch -d 2>/dev/null'
+
+# Tail logs in Rails project root
+alias devlogs='tail -f log/development.log'
+alias testlogs='tail -f log/test.log'
