@@ -1,5 +1,5 @@
 if command -v brew; then
-  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+  source /opt/homebrew/opt/asdf/libexec/asdf.sh
   export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 fi
 
@@ -27,4 +27,5 @@ bindkey -v
 PROMPT='(%T) %F{34}%n%f:%F{32}%4~%f (${vcs_info_msg_0_}) $ '
 
 # Aliases
-source .zsh_aliases
+source ~/.zsh_aliases
+source ~/.zprofile

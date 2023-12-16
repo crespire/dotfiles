@@ -43,6 +43,7 @@ export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR ZDOTDIR
 # ln -sfv "$DOTFILES_DIR/.config/bash/.bash_profile" "$HOME"
 # ln -sfv "$DOTFILES_DIR/.config/bash/.bash_aliases" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/zsh/.zshrc" "$HOME"
+ln -sfv "$DOTFILES_DIR/.config/zsh/.zprofile" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/zsh/.zsh_aliases" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.asdfrc" "$HOME"
 ln -sfv "$DOTFILES_DIR/.config/.rubocop.yml" "$HOME"
