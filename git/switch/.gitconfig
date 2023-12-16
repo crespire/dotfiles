@@ -1,4 +1,3 @@
 [user]
   name = 'Simmon Li'
   email = simmon@switchgrowth.com
-  signingkey = ~/.ssh/switch_ed25519 
