@@ -2,6 +2,7 @@
 
 # Utilities
 if command -v brew; then
+	echo "Brew found."
 else
 	sudo apt-get -y update && sudo apt-get -y upgrade
 	sudo apt-get -y install software-properties-common
