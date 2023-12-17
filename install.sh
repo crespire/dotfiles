@@ -53,7 +53,8 @@ ln -sfv "$DOTFILES_DIR/git/.gitconfig" "$HOME"
 ln -sfv "$DOTFILES_DIR/lang-defaults/.default-gems" "$HOME"
 ln -sfv "$DOTFILES_DIR/lang-defaults/.default-npm-packages" "$HOME"
 
-source "$HOME/.bashrc"
+# Update shell
+source "$HOME/.zshrc"
 
 # Install some packages
 source "$DOTFILES_DIR/install/utils.sh"
