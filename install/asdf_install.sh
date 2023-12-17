@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ ! -d ~/.asdf ]; then
-	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.2
+	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
 fi
 
 source $HOME/.asdf/asdf.sh
