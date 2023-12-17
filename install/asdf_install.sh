@@ -8,13 +8,13 @@ source $HOME/.asdf/asdf.sh
 
 # Install Ruby
 asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
-asdf install ruby 3.1.3
-asdf global ruby 3.1.3
+asdf install ruby 3.2.2
+asdf global ruby 3.2.2
 
 # Node
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-asdf install nodejs 18.15.0
-asdf global nodejs 18.15.0
+asdf install nodejs latest:20
+asdf global nodejs latest:20
 
 # Yarn
 asdf plugin add yarn https://github.com/twuni/asdf-yarn
