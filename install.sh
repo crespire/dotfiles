@@ -56,6 +56,6 @@ ln -sfv "$DOTFILES_DIR/lang-defaults/.default-npm-packages" "$HOME"
 source "$HOME/.bashrc"
 
 # Install some packages
-. "$DOTFILES_DIR/install/utils.sh"
-. "$DOTFILES_DIR/install/nvim.sh"
-. "$DOTFILES_DIR/install/asdf_install.sh"
+source "$DOTFILES_DIR/install/utils.sh"
+source "$DOTFILES_DIR/install/nvim.sh"
+source "$DOTFILES_DIR/install/asdf_install.sh"
