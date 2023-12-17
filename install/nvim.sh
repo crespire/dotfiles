@@ -9,5 +9,4 @@ else
 	sudo apt -y install neovim
 fi
 
-. "$HOME/.zshrc"
 nvim --headless
