@@ -18,8 +18,9 @@ asdf global nodejs latest:20
 
 # Yarn
 asdf plugin add yarn https://github.com/twuni/asdf-yarn
-asdf install yarn latest
-asdf global yarn latest
+# See https://github.com/twuni/asdf-yarn/issues/33 - latest .22 is missing artifacts
+asdf install yarn 1.22.19
+asdf global yarn 1.22.19
 
 # Go
 asdf plugin add golang https://github.com/kennyp/asdf-golang
