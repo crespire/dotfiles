@@ -63,4 +63,4 @@ source "$DOTFILES_DIR/install/nvim.sh"
 source "$DOTFILES_DIR/install/asdf_install.sh"
 
 # Source shell
-source "$HOME/.zshrc"
+source "~/.zshrc"
