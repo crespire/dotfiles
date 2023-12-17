@@ -11,7 +11,7 @@ set -eEuo pipefail
 #     with non-zero status, returns 0 if all commands in the pipeline are a
 #     success.
 
-printf "Let's install some stuff..."
+printf "Let's install some stuff...\n"
 
 # Install network fetch util
 sudo apt -y install curl
