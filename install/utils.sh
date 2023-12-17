@@ -7,7 +7,8 @@ else
 	sudo apt-get -y install software-properties-common
 	sudo apt-get -y install build-essential
 	sudo apt-get -y install libssl-dev
-	sudo apt=get -y install libyaml-dev
+	sudo apt-get -y install libyaml-dev
+ 	sudo apt-get -y install zsh
 	sudo apt-get -y install zlib1g zlib1g-dev
 	sudo apt-get -y install ripgrep
 	sudo apt-get -y install fd-find
