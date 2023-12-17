@@ -11,6 +11,7 @@ else
 	sudo apt-get -y install libyaml-dev
 	sudo apt-get -y install zlib1g zlib1g-dev
 	sudo apt-get -y install ripgrep
+ 	sudo apt-get -y install postgresql postgresql-contrib
 	sudo apt-get -y install fd-find
 fi
 
