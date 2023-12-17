@@ -15,6 +15,9 @@ else
 	sudo apt-get -y install fd-find
 fi
 
+# Source shell after installing zsh
+source ~/.zshrc
+
 # Install Lazygit
 echo "Installing Lazygit"
 LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
