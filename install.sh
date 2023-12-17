@@ -54,7 +54,7 @@ ln -sfv "$DOTFILES_DIR/lang-defaults/.default-gems" "$HOME"
 ln -sfv "$DOTFILES_DIR/lang-defaults/.default-npm-packages" "$HOME"
 
 # Update shell
-source "$HOME/.zshrc"
+source ~/.zshrc
 
 # Install some packages
 source "$DOTFILES_DIR/install/utils.sh"
