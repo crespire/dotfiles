@@ -25,9 +25,6 @@ ZDOTDIR="$HOME/.dotfiles/.config/zsh/"
 export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR ZDOTDIR
 # DOTFILES_CACHE="$DOTFILES_DIR/.cache.sh"
 
-# Source shell config
-source "$HOME/.dotfiles/.config/zsh/.zshrc"
-
 # Set up Bitwarden env vars if not present
 #if [[ -z "${BW_CLIENTID}" ]]; then
 #  echo "Bitwarden client id: "
