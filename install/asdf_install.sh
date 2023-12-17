@@ -4,7 +4,7 @@ if [ ! -d ~/.asdf ]; then
 	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.11.2
 fi
 
-. $HOME/.asdf/asdf.sh
+source $HOME/.asdf/asdf.sh
 
 # Install Ruby
 asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
