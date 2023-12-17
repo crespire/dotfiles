@@ -9,4 +9,6 @@ else
 	sudo apt -y install neovim
 fi
 
+printf "Neovim headless running...\n"
 nvim --headless
+printf "Neovim headless done!\n"
