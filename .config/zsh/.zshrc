@@ -2,6 +2,8 @@ if [ -d /opt/homebrew/ ]; then
   source /opt/homebrew/opt/asdf/libexec/asdf.sh
   export PATH=/opt/homebrew/bin:$PATH
   export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+else
+  source $HOME/.asdf/asdf.sh
 fi
 
 # autoload
