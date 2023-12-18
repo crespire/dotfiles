@@ -9,7 +9,7 @@
 [color]
 	ui = auto
 [core]
-	editor = vim
+	editor = nvim
 [help]
   autocorrect = 30
 [push]

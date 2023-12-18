@@ -2,6 +2,7 @@
 
 # Program aliases
 alias vim='nvim'
+alias be='bundle exec'
 
 # Utility
 alias ls='ls -ahlH --color=auto'
