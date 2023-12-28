@@ -36,5 +36,5 @@ source ~/.zprofile
 # Kill port
 kill_port() {
   port_num=$1
-  lsof -ti :@port_num | xargs kill -9
+  lsof -ti :$port_num | xargs kill -9
 }
