@@ -32,3 +32,9 @@ PROMPT='(%T) %F{34}%n%f:%F{32}%4~%f (${vcs_info_msg_0_}) $ '
 # Aliases
 source ~/.zsh_aliases
 source ~/.zprofile
+
+# Kill port
+kill_port() {
+  port_num=$1
+  lsof -ti :@port_num | xargs kill -9
+}
