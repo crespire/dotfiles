@@ -1,3 +1,3 @@
 return {
-  { "illuminate" },
+  { "RRethy/vim-illuminate" },
 }
