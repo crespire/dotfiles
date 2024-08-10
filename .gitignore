@@ -1,3 +1,6 @@
 lazygit
 lazygit.tar.gz
-
+.config/gcloud/*
+!.config/gcloud/.keep
+.config/filezilla/*
+!.config/filezilla/.keep
