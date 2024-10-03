@@ -5,7 +5,7 @@ unalias gbc 2>/dev/null
 
 gbc() {
   echo "Refreshing local branch list..."
-  git remote update origin --prune &>/dev/null
+  git remote update origin &>/dev/null
 
   echo "Cleaning merged branches"
   git branch --merged | grep -v 'main$' | xargs git branch -d 2>/dev/null
