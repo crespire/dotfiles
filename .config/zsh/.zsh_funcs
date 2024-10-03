@@ -20,6 +20,6 @@ gbc() {
 
   for x in `git branch -v | grep " \[gone\] " | cut -d " " -f 3`
   do
-    git br -D $x
+    git branch -D $x
   done
 }
