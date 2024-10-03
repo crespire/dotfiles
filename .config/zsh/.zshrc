@@ -29,8 +29,9 @@ bindkey -v
 # Prompt
 PROMPT='(%T) %F{34}%n%f:%F{32}%4~%f (${vcs_info_msg_0_}) $ '
 
-# Aliases
+# Aliases and things
 source ~/.zsh_aliases
+source ~/.zsh_funcs
 source ~/.zprofile
 
 # Kill port
