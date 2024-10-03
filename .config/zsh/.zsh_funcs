@@ -3,6 +3,9 @@
 unalias gbc;
 
 gbc() {
+  echo "Refreshing branch list..."
+  git remote update origin --prune
+
   echo "Cleaning merged branches"
   git branch --merged | grep -v 'main$' | xargs git branch -d 2>/dev/null
   
