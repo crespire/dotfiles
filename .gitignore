@@ -4,3 +4,5 @@ lazygit.tar.gz
 !.config/gcloud/.keep
 .config/filezilla/*
 !.config/filezilla/.keep
+.config/go/*
+!.config/go/.keep
