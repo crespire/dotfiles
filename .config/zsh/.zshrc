@@ -6,6 +6,8 @@ else
   source $HOME/.asdf/asdf.sh
 fi
 
+export ASDF_GOLANG_MOD_VERSION_ENABLED=true
+
 # autoload
 autoload -Uz compinit && compinit
 autoload -Uz vcs_info
