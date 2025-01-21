@@ -13,7 +13,6 @@
 [help]
   autocorrect = 30
 [push]
-  default = current
   autoSetupRemote = true
 [gpg]
 	format = ssh

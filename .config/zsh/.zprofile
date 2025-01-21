@@ -3,3 +3,4 @@ if command -v brew; then
 fi
 
 export PGGSSENCMODE=disable
+. "$HOME/.cargo/env"
