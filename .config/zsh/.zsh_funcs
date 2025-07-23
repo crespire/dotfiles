@@ -25,7 +25,7 @@ gbc() {
   done
 }
 
-dangerously_kill_sidekiq() {
+kill_sidekiq() {
   echo "Killing Sidekiq without waiting for jobs to finish..."
   ps -ef | grep sidekiq | grep -v grep | awk '{print $2}' | xargs kill -9
 }
