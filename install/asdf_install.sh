@@ -41,8 +41,8 @@ asdf global ruby latest
 # =============================================================================
 echo "Setting up Node.js..."
 add_plugin nodejs https://github.com/asdf-vm/asdf-nodejs.git
-asdf install nodejs latest:20
-asdf global nodejs latest:20
+asdf install nodejs latest
+asdf global nodejs latest
 
 # =============================================================================
 # Yarn
