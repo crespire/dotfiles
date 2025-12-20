@@ -13,12 +13,43 @@ set -eEuo pipefail
 
 printf "Let's install some stuff...\n"
 
-# Install network fetch util
-sudo apt -y install curl
+# Detect OS
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+export OS ARCH
 
-# Install zsh and make shell
-sudo apt -y install zsh
-chsh -s $(which zsh)
+if [[ "$OS" == "Darwin" ]]; then
+  printf "Detected macOS\n"
+
+  # Install Homebrew if not present
+  if ! command -v brew &> /dev/null; then
+    printf "Installing Homebrew...\n"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Add brew to path for Apple Silicon
+    if [[ "$ARCH" == "arm64" ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+      eval "$(/usr/local/bin/brew shellenv)"
+    fi
+  fi
+
+  # curl is pre-installed on macOS
+  # zsh is the default shell on modern macOS, but ensure it's there
+  brew install zsh || true
+
+elif [[ "$OS" == "Linux" ]]; then
+  printf "Detected Linux\n"
+
+  # Install network fetch util
+  sudo apt -y install curl
+
+  # Install zsh
+  sudo apt -y install zsh
+fi
+
+# Set zsh as default shell
+chsh -s "$(which zsh)"
 
 DOTFILES_DIR="$HOME/.dotfiles"
 ZDOTDIR="$HOME/.dotfiles/.config/zsh/"
@@ -64,4 +95,4 @@ source "$DOTFILES_DIR/install/nvim.sh"
 source "$DOTFILES_DIR/install/asdf_install.sh"
 
 # Source shell
-source "~/.zshrc"
+source "$HOME/.zshrc"

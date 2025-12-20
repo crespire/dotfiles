@@ -1,10 +1,11 @@
 #!/bin/sh
 
 if [ ! -d ~/.asdf ]; then
-	git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+	git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 fi
 
-source $HOME/.asdf/asdf.sh
+# Use . instead of source for POSIX compatibility
+. "$HOME/.asdf/asdf.sh"
 
 # Install Ruby
 asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
@@ -18,9 +19,8 @@ asdf global nodejs latest:20
 
 # Yarn
 asdf plugin add yarn https://github.com/twuni/asdf-yarn
-# See https://github.com/twuni/asdf-yarn/issues/33 - latest .22 is missing artifacts
-asdf install yarn 1.22.19
-asdf global yarn 1.22.19
+asdf install yarn 1.22.22
+asdf global yarn 1.22.22
 
 # Go
 asdf plugin add golang https://github.com/kennyp/asdf-golang
