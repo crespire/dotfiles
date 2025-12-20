@@ -7,6 +7,7 @@ else
 fi
 
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # autoload
 autoload -Uz compinit && compinit
