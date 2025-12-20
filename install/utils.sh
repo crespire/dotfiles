@@ -2,17 +2,17 @@
 
 # Utilities
 if command -v brew; then
-	echo "Brew found."
+  echo "Brew found."
 else
-	sudo apt-get -y update && sudo apt-get -y upgrade
-	sudo apt-get -y install software-properties-common
-	sudo apt-get -y install build-essential
-	sudo apt-get -y install libssl-dev
-	sudo apt-get -y install libyaml-dev
-	sudo apt-get -y install zlib1g zlib1g-dev
-	sudo apt-get -y install ripgrep
- 	sudo apt-get -y install postgresql postgresql-contrib libpq-dev
-	sudo apt-get -y install fd-find
+  sudo apt-get -y update && sudo apt-get -y upgrade
+  sudo apt-get -y install software-properties-common
+  sudo apt-get -y install build-essential
+  sudo apt-get -y install libssl-dev
+  sudo apt-get -y install libyaml-dev
+  sudo apt-get -y install zlib1g zlib1g-dev
+  sudo apt-get -y install ripgrep
+  sudo apt-get -y install postgresql postgresql-contrib libpq-dev
+  sudo apt-get -y install fd-find
 fi
 
 # Install Lazygit
@@ -24,6 +24,10 @@ sudo install lazygit /usr/local/bin
 rm lazygit
 rm lazygit.tar.gz
 echo "Installed Lazygit!"
+
+# Install fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all --no-bash --no-fish
 
 # Install Jetbrains Mono Nerdfonts
 echo "Downloading JetBrains Mono..."
