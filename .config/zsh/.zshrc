@@ -51,3 +51,5 @@ if [ -f '/Users/simmonli/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/simmon
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/simmonli/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/simmonli/google-cloud-sdk/completion.zsh.inc'; fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
