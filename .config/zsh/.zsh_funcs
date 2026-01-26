@@ -40,3 +40,9 @@ kill_sidekiq() {
   echo "Killing Sidekiq without waiting for jobs to finish..."
   ps -ef | grep sidekiq | grep -v grep | awk '{print $2}' | xargs kill -9
 }
+
+# Kill port
+kill_port() {
+  port_num=$1
+  lsof -ti :$port_num | xargs kill -9
+}

@@ -1,19 +1,3 @@
-# asdf version manager setup
-if [ -d /opt/homebrew/ ]; then
-  # macOS with Homebrew (Apple Silicon)
-  export PATH=/opt/homebrew/bin:$PATH
-  if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
-    source /opt/homebrew/opt/asdf/libexec/asdf.sh
-  fi
-elif [ -d /usr/local/Cellar ]; then
-  # macOS with Homebrew (Intel)
-  if [ -f /usr/local/opt/asdf/libexec/asdf.sh ]; then
-    source /usr/local/opt/asdf/libexec/asdf.sh
-  fi
-else
-  # Linux: asdf is a standalone binary, just ensure ~/.local/bin is on PATH
-  export PATH="$HOME/.local/bin:$PATH"
-fi
 
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
@@ -51,14 +35,31 @@ if [ -f ~/.asdf/plugins/golang/set-env.zsh ]; then
   source ~/.asdf/plugins/golang/set-env.zsh
 fi
 
-# Kill port
-kill_port() {
-  port_num=$1
-  lsof -ti :$port_num | xargs kill -9
-}
-
 # Google Cloud SDK PATH and completions
 if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/simmonli/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/simmonli/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/simmonli/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/simmonli/google-cloud-sdk/completion.zsh.inc'; fi
+
+# asdf version manager setup
+if [ -d /opt/homebrew/ ]; then
+  # macOS with Homebrew (Apple Silicon)
+  export PATH=/opt/homebrew/bin:$PATH
+  if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
+    source /opt/homebrew/opt/asdf/libexec/asdf.sh
+  fi
+elif [ -d /usr/local/Cellar ]; then
+  # macOS with Homebrew (Intel)
+  if [ -f /usr/local/opt/asdf/libexec/asdf.sh ]; then
+    source /usr/local/opt/asdf/libexec/asdf.sh
+  fi
+else
+  # Linux: asdf is a standalone binary, just ensure ~/.local/bin is on PATH
+  export PATH="$HOME/.local/bin:$PATH"
+fi
