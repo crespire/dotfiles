@@ -63,3 +63,4 @@ else
   # Linux: asdf is a standalone binary, just ensure ~/.local/bin is on PATH
   export PATH="$HOME/.local/bin:$PATH"
 fi
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
