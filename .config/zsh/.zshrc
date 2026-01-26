@@ -62,8 +62,3 @@ if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/simmonli/.lmstudio/bin"
-# End of LM Studio CLI section
-
