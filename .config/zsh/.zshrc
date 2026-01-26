@@ -1,8 +1,18 @@
+# asdf version manager setup
 if [ -d /opt/homebrew/ ]; then
-  source /opt/homebrew/opt/asdf/libexec/asdf.sh
+  # macOS with Homebrew (Apple Silicon)
   export PATH=/opt/homebrew/bin:$PATH
+  if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
+    source /opt/homebrew/opt/asdf/libexec/asdf.sh
+  fi
+elif [ -d /usr/local/Cellar ]; then
+  # macOS with Homebrew (Intel)
+  if [ -f /usr/local/opt/asdf/libexec/asdf.sh ]; then
+    source /usr/local/opt/asdf/libexec/asdf.sh
+  fi
 else
-  source $HOME/.asdf/asdf.sh
+  # Linux: asdf is a standalone binary, just ensure ~/.local/bin is on PATH
+  export PATH="$HOME/.local/bin:$PATH"
 fi
 
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
@@ -36,9 +46,10 @@ source ~/.zsh_aliases
 source ~/.zsh_funcs
 source ~/.zprofile
 
-# Golang via ASDF
-source ~/.asdf/plugins/golang/set-env.zsh
-export ASDF_GOLANG_MOD_VERSION_ENABLED=true
+# Golang via ASDF (source set-env if it exists)
+if [ -f ~/.asdf/plugins/golang/set-env.zsh ]; then
+  source ~/.asdf/plugins/golang/set-env.zsh
+fi
 
 # Kill port
 kill_port() {
@@ -53,3 +64,8 @@ if [ -f '/Users/simmonli/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/simmon
 if [ -f '/Users/simmonli/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/simmonli/google-cloud-sdk/completion.zsh.inc'; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/simmonli/.lmstudio/bin"
+# End of LM Studio CLI section
+

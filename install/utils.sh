@@ -35,7 +35,7 @@ elif [ "$OS" = "Linux" ]; then
   sudo apt-get -y install fd-find
   sudo apt-get -y install unzip
   sudo apt-get -y install fontconfig  # for fc-cache
-  sudo apt-get -y install git curl    # ensure git and curl are available
+  sudo apt-get -y install git curl bash  # ensure git, curl, and bash are available (bash required for asdf)
 fi
 
 # =============================================================================
