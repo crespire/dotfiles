@@ -135,10 +135,6 @@ if [[ ":${PATH}:" != *":${bin_path}:"* ]]; then
 	export PATH=$bin_path:$PATH
 fi
 export PATH="$HOME/google-cloud-sdk/bin:$PATH"
-
-# Rust/Cargo
-source "$HOME/.cargo/env"
-
 # Sets vi motions in terminal
 set -o vi
 
