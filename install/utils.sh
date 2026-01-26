@@ -106,6 +106,57 @@ else
 fi
 
 # =============================================================================
+# Google Cloud CLI
+# =============================================================================
+GCLOUD_INSTALL_DIR="$HOME/google-cloud-sdk"
+
+if [ -d "$GCLOUD_INSTALL_DIR" ]; then
+  info "Google Cloud CLI already installed, skipping..."
+else
+  info "Installing Google Cloud CLI..."
+
+  # Determine the correct package based on OS and architecture
+  if [ "$OS" = "Darwin" ]; then
+    if [ "$ARCH" = "arm64" ]; then
+      GCLOUD_PACKAGE="google-cloud-cli-darwin-arm.tar.gz"
+    else
+      GCLOUD_PACKAGE="google-cloud-cli-darwin-x86_64.tar.gz"
+    fi
+  elif [ "$OS" = "Linux" ]; then
+    if [ "$ARCH" = "x86_64" ]; then
+      GCLOUD_PACKAGE="google-cloud-cli-linux-x86_64.tar.gz"
+    elif [ "$ARCH" = "aarch64" ]; then
+      GCLOUD_PACKAGE="google-cloud-cli-linux-arm.tar.gz"
+    else
+      GCLOUD_PACKAGE="google-cloud-cli-linux-x86.tar.gz"
+    fi
+  else
+    warn "Unsupported OS for gcloud CLI: $OS"
+    GCLOUD_PACKAGE=""
+  fi
+
+  if [ -n "$GCLOUD_PACKAGE" ]; then
+    # Download to home directory
+    cd "$HOME"
+    curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${GCLOUD_PACKAGE}"
+
+    # Extract (creates google-cloud-sdk directory)
+    tar -xf "$GCLOUD_PACKAGE"
+
+    # Cleanup downloaded archive
+    rm "$GCLOUD_PACKAGE"
+
+    # Run the install script (non-interactive)
+    # --quiet: disable prompts
+    # --path-update: add to PATH in shell rc files
+    # --command-completion: enable command completion
+    "$GCLOUD_INSTALL_DIR/install.sh" --quiet --path-update true --command-completion true
+
+    info "Google Cloud CLI installed to $GCLOUD_INSTALL_DIR"
+  fi
+fi
+
+# =============================================================================
 # Optional: Go Lint
 # =============================================================================
 # sudo curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
