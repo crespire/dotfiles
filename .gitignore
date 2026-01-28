@@ -6,3 +6,5 @@ lazygit.tar.gz
 !.config/filezilla/.keep
 .config/go/*
 !.config/go/.keep
+.config/iterm2*
+!.config/iterm2/.keep
