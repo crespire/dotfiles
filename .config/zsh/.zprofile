@@ -16,6 +16,7 @@ export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/local/opt/libxml2/lib/pkgco
 
 export GOPATH=/Users/username/go
 export PATH=$GOPATH/bin:$PATH
+export EDITOR=nvim
 
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.

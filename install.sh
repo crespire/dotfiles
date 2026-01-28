@@ -60,7 +60,7 @@ link_if_exists() {
   local src="$1"
   local dest="$2"
   if [[ -e "$src" ]]; then
-    run ln -sfv "$src" "$dest"
+    run ln -sfnv "$src" "$dest"
   else
     warn "Skipping symlink: $src (not found)"
   fi
