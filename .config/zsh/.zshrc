@@ -59,8 +59,8 @@ elif [ -d /usr/local/Cellar ]; then
   if [ -f /usr/local/opt/asdf/libexec/asdf.sh ]; then
     source /usr/local/opt/asdf/libexec/asdf.sh
   fi
-else
-  # Linux: asdf is a standalone binary, just ensure ~/.local/bin is on PATH
-  export PATH="$HOME/.local/bin:$PATH"
 fi
+
+# Some apps may install to this location regardless of OS, so put it in path
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
