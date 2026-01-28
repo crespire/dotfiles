@@ -47,6 +47,11 @@ if [ -f '/Users/simmonli/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/simmon
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/simmonli/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/simmonli/google-cloud-sdk/completion.zsh.inc'; fi
 
+# Move PG tools into path for homebrew cask setup
+if [ -d /opt/homebrew/ ]; then
+  export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+fi
+
 # asdf version manager setup
 if [ -d /opt/homebrew/ ]; then
   # macOS with Homebrew (Apple Silicon)
@@ -63,4 +68,3 @@ fi
 
 # Some apps may install to this location regardless of OS, so put it in path
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
