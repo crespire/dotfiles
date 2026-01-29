@@ -12,15 +12,17 @@ GREEN="${GREEN:-\033[0;32m}"
 YELLOW="${YELLOW:-\033[1;33m}"
 NC="${NC:-\033[0m}"
 
-info()  { printf "${GREEN}[INFO]${NC} %s\n" "$1"; }
-warn()  { printf "${YELLOW}[WARN]${NC} %s\n" "$1"; }
+info() { printf "${GREEN}[INFO]${NC} %s\n" "$1"; }
+warn() { printf "${YELLOW}[WARN]${NC} %s\n" "$1"; }
 
 # =============================================================================
 # System Dependencies
 # =============================================================================
 if [ "$OS" = "Darwin" ]; then
   info "Installing macOS dependencies via Homebrew..."
-  brew install openssl libyaml zlib ripgrep postgresql fd unzip
+  brew install openssl libyaml zlib ripgrep postgresql fd unzip libpq
+  # This overwrites the symlinks to the binaries to the Homebrew Postgres
+  brew link --overwrite --force libpq
 
 elif [ "$OS" = "Linux" ]; then
   info "Installing Linux dependencies via apt..."
@@ -34,8 +36,8 @@ elif [ "$OS" = "Linux" ]; then
   sudo apt-get -y install postgresql postgresql-contrib libpq-dev
   sudo apt-get -y install fd-find
   sudo apt-get -y install unzip
-  sudo apt-get -y install fontconfig  # for fc-cache
-  sudo apt-get -y install git curl bash  # ensure git, curl, and bash are available (bash required for asdf)
+  sudo apt-get -y install fontconfig    # for fc-cache
+  sudo apt-get -y install git curl bash # ensure git, curl, and bash are available (bash required for asdf)
 fi
 
 # =============================================================================
