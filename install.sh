@@ -170,6 +170,9 @@ link_if_exists "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
 # link_if_exists "$DOTFILES_DIR/.config/alacritty" "$HOME/.config/alacritty"
 # link_if_exists "$DOTFILES_DIR/.config/kitty" "$HOME/.config/kitty"
 
+# Claude Code configuration
+link_if_exists "$DOTFILES_DIR/.config/.claude" "$HOME/.claude"
+
 # =============================================================================
 # Install Packages
 # =============================================================================

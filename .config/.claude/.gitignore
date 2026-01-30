@@ -1,0 +1,26 @@
+# Cache and temporary files
+/cache/*
+/debug/*
+/downloads/*
+/file-history/*
+/paste-cache/*
+/session-env/*
+/shell-snapshots/*
+/statsig/*
+/telemetry/*
+/todos/*
+/plans/*
+
+# Sensitive/local data
+/history.jsonl
+/stats-cache.json
+/projects/*
+
+# Claude installer (system file, not user config)
+/install.sh
+
+# Marketplace plugins (can be re-fetched)
+/plugins/marketplaces/
+
+# Preserve directory structure
+!/**/.keep
