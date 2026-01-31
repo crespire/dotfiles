@@ -12,8 +12,8 @@ GREEN="${GREEN:-\033[0;32m}"
 YELLOW="${YELLOW:-\033[1;33m}"
 NC="${NC:-\033[0m}"
 
-info()  { printf "${GREEN}[INFO]${NC} %s\n" "$1"; }
-warn()  { printf "${YELLOW}[WARN]${NC} %s\n" "$1"; }
+info() { printf "${GREEN}[INFO]${NC} %s\n" "$1"; }
+warn() { printf "${YELLOW}[WARN]${NC} %s\n" "$1"; }
 
 # =============================================================================
 # Install asdf based on OS
@@ -36,47 +36,43 @@ if [ "$OS" = "Darwin" ]; then
   fi
 
 elif [ "$OS" = "Linux" ]; then
-  # Linux: Build from source
-  # Ensure dependencies are installed (git and bash should be present from utils.sh)
-  if ! command -v git >/dev/null 2>&1; then
-    warn "git is required but not installed. Please install git first."
-    exit 1
-  fi
+  # Linux: Install pre-built binary
+  ARCH=$(uname -m)
+  case "$ARCH" in
+    x86_64)  RELEASE_ARCH="amd64" ;;
+    aarch64) RELEASE_ARCH="arm64" ;;
+    *)       warn "Unsupported architecture: $ARCH"; exit 1 ;;
+  esac
 
-  if ! command -v make >/dev/null 2>&1; then
-    info "Installing make (required for building asdf)..."
-    sudo apt-get -y install make
-  fi
-
+  INSTALL_ASDF=false
   if command -v asdf >/dev/null 2>&1; then
     INSTALLED_VERSION=$(asdf version 2>/dev/null | head -1)
-    info "asdf already installed (${INSTALLED_VERSION})"
+    if [ "$INSTALLED_VERSION" = "$ASDF_VERSION" ]; then
+      info "asdf ${ASDF_VERSION} already installed, skipping."
+    else
+      info "asdf version differs (installed: ${INSTALLED_VERSION}, wanted: ${ASDF_VERSION}), updating..."
+      INSTALL_ASDF=true
+    fi
   else
-    info "Installing asdf ${ASDF_VERSION} from source..."
+    INSTALL_ASDF=true
+  fi
 
-    # Create temp directory for build
-    ASDF_BUILD_DIR=$(mktemp -d)
-    cd "$ASDF_BUILD_DIR"
+  if [ "$INSTALL_ASDF" = true ]; then
+    info "Installing asdf ${ASDF_VERSION} pre-built binary..."
 
-    # Clone the specific version
-    git clone https://github.com/asdf-vm/asdf.git --branch "$ASDF_VERSION" --depth 1
+    TARBALL="asdf-${ASDF_VERSION}-linux-${RELEASE_ARCH}.tar.gz"
+    DOWNLOAD_URL="https://github.com/asdf-vm/asdf/releases/download/${ASDF_VERSION}/${TARBALL}"
 
-    # Build
-    cd asdf
-    make
+    cd "$HOME" || exit
+    curl -fsSL -o "$TARBALL" "$DOWNLOAD_URL"
 
-    # Install binary to ~/.local/bin (user-writable, commonly on PATH)
     mkdir -p "$HOME/.local/bin"
-    cp bin/asdf "$HOME/.local/bin/asdf"
+    tar -xzf "$TARBALL" -C "$HOME/.local/bin" asdf
     chmod +x "$HOME/.local/bin/asdf"
 
-    # Cleanup
-    cd "$HOME"
-    rm -rf "$ASDF_BUILD_DIR"
+    rm -f "$TARBALL"
 
     info "asdf installed to ~/.local/bin/asdf"
-
-    # Ensure ~/.local/bin is on PATH for this session
     export PATH="$HOME/.local/bin:$PATH"
   fi
 
@@ -94,14 +90,14 @@ fi
 
 # Helper to add plugin idempotently
 add_plugin() {
-	local name="$1"
-	local url="$2"
-	if asdf plugin list | grep -q "^${name}$"; then
-		echo "Plugin $name already installed"
-	else
-		echo "Adding plugin $name..."
-		asdf plugin add "$name" "$url"
-	fi
+  plugin_name="$1"
+  plugin_url="$2"
+  if asdf plugin list | grep -q "^${plugin_name}$"; then
+    echo "Plugin $plugin_name already installed"
+  else
+    echo "Adding plugin $plugin_name..."
+    asdf plugin add "$plugin_name" "$plugin_url"
+  fi
 }
 
 # =============================================================================
