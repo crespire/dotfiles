@@ -8,3 +8,4 @@ lazygit.tar.gz
 !.config/go/.keep
 .config/iterm2*
 !.config/iterm2/.keep
+.claude/*local*.*
