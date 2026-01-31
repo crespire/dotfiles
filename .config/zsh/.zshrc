@@ -41,12 +41,6 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/simmonli/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/simmonli/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/simmonli/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/simmonli/google-cloud-sdk/completion.zsh.inc'; fi
-
 # Move PG tools into path for homebrew cask setup
 if [ -d /opt/homebrew/ ]; then
   export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
@@ -68,3 +62,9 @@ fi
 
 # Some apps may install to this location regardless of OS, so put it in path
 export PATH="$HOME/.local/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/crespire/google-cloud-sdk/path.zsh.inc' ]; then . '/home/crespire/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/crespire/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/crespire/google-cloud-sdk/completion.zsh.inc'; fi
