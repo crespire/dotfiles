@@ -14,6 +14,7 @@
 # Sensitive/local data
 /history.jsonl
 /stats-cache.json
+/.credentials.json
 /projects/*
 
 # Claude installer (system file, not user config)
