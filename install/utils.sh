@@ -36,6 +36,7 @@ elif [ "$OS" = "Linux" ]; then
   sudo apt-get -y install postgresql postgresql-contrib libpq-dev
   sudo apt-get -y install fd-find
   sudo apt-get -y install unzip
+  sudo apt-get -y install jq
   sudo apt-get -y install fontconfig    # for fc-cache
   sudo apt-get -y install git curl bash # ensure git, curl, and bash are available (bash required for asdf)
 fi
@@ -77,6 +78,21 @@ else
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install --all --no-bash --no-fish
   info "fzf installed!"
+fi
+
+# =============================================================================
+# Claude Code
+# =============================================================================
+if command -v claude >/dev/null 2>&1; then
+  info "Claude Code already installed, skipping..."
+else
+  info "Installing Claude Code..."
+  if [ "$OS" = "Darwin" ]; then
+    brew install --cask claude-code
+  else
+    curl -fsSL https://claude.ai/install.sh | bash
+  fi
+  info "Claude Code installed!"
 fi
 
 # =============================================================================
@@ -139,7 +155,7 @@ else
 
   if [ -n "$GCLOUD_PACKAGE" ]; then
     # Download to home directory
-    cd "$HOME"
+    cd "$HOME" || exit
     curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${GCLOUD_PACKAGE}"
 
     # Extract (creates google-cloud-sdk directory)
