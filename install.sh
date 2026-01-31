@@ -59,11 +59,16 @@ run() {
 link_if_exists() {
   local src="$1"
   local dest="$2"
-  if [[ -e "$src" ]]; then
-    run ln -sfnv "$src" "$dest"
-  else
+  if [[ ! -e "$src" ]]; then
     warn "Skipping symlink: $src (not found)"
+    return
   fi
+  # Skip if destination already resolves to the same path as source
+  if [[ -e "$dest" ]] && [[ "$(readlink -f "$src")" == "$(readlink -f "$dest")" ]]; then
+    info "Already linked: $dest"
+    return
+  fi
+  run ln -sfnv "$src" "$dest"
 }
 
 # =============================================================================
