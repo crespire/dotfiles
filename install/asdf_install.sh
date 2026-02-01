@@ -39,9 +39,12 @@ elif [ "$OS" = "Linux" ]; then
   # Linux: Install pre-built binary
   ARCH=$(uname -m)
   case "$ARCH" in
-    x86_64)  RELEASE_ARCH="amd64" ;;
-    aarch64) RELEASE_ARCH="arm64" ;;
-    *)       warn "Unsupported architecture: $ARCH"; exit 1 ;;
+  x86_64) RELEASE_ARCH="amd64" ;;
+  aarch64) RELEASE_ARCH="arm64" ;;
+  *)
+    warn "Unsupported architecture: $ARCH"
+    exit 1
+    ;;
   esac
 
   INSTALL_ASDF=false
@@ -74,6 +77,8 @@ elif [ "$OS" = "Linux" ]; then
 
     info "asdf installed to ~/.local/bin/asdf"
     export PATH="$HOME/.local/bin:$PATH"
+    export PATH="$HOME/.asdf/bin:$PATH"
+    export PATH="$HOME/.asdf/shims:$PATH"
   fi
 
   # Verify installation
