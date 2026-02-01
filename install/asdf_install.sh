@@ -77,8 +77,6 @@ elif [ "$OS" = "Linux" ]; then
 
     info "asdf installed to ~/.local/bin/asdf"
     export PATH="$HOME/.local/bin:$PATH"
-    export PATH="$HOME/.asdf/bin:$PATH"
-    export PATH="$HOME/.asdf/shims:$PATH"
   fi
 
   # Verify installation

@@ -63,6 +63,12 @@ fi
 # Some apps may install to this location regardless of OS, so put it in path
 export PATH="$HOME/.local/bin:$PATH"
 
+# expose asdf shims
+if command -v asdf; then
+  export PATH="$HOME/.asdf/bin:$PATH"
+  export PATH="$HOME/.asdf/shims:$PATH"
+fi
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/home/crespire/google-cloud-sdk/path.zsh.inc' ]; then . '/home/crespire/google-cloud-sdk/path.zsh.inc'; fi
 
