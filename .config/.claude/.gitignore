@@ -10,6 +10,7 @@
 /telemetry/*
 /todos/*
 /plans/*
+/tasks/*
 
 # Sensitive/local data
 /history.jsonl
@@ -19,6 +20,9 @@
 
 # Claude installer (system file, not user config)
 /install.sh
+
+# MacOS
+.DS_Store
 
 # Marketplace plugins (can be re-fetched)
 /plugins/marketplaces/
