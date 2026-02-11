@@ -9,3 +9,4 @@ lazygit.tar.gz
 .config/iterm2*
 !.config/iterm2/.keep
 .claude/*local*.*
+.DS_Store
