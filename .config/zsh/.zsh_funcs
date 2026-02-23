@@ -36,6 +36,14 @@ gbc() {
   done
 }
 
+gwt() {
+  if [ -z "$1" ]; then
+    bin/worktree list
+  else
+    cd $(bin/worktree switch $1 --print-path)
+  fi
+}
+
 kill_sidekiq() {
   echo "Killing Sidekiq without waiting for jobs to finish..."
   ps -ef | grep sidekiq | grep -v grep | awk '{print $2}' | xargs kill -9
