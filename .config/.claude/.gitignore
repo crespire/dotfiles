@@ -11,18 +11,23 @@
 /todos/*
 /plans/*
 /tasks/*
+/backups/*
+/projects/*
+/chrome/*
 
 # Sensitive/local data
 /history.jsonl
 /stats-cache.json
 /.credentials.json
-/projects/*
 
 # Claude installer (system file, not user config)
 /install.sh
 
 # MacOS
 .DS_Store
+
+# Cache
+*cache.json
 
 # Marketplace plugins (can be re-fetched)
 /plugins/marketplaces/
