@@ -30,7 +30,7 @@ gbc() {
   git branch --merged | grep -v 'main$' | xargs git branch -d 2>/dev/null
   
   echo "Cleaning gone branches"
-  for x in $(git branch -v | grep " \[gone\] " | awk '{print $1}')
+  for x in $(git branch -v | grep " \[gone\] " | awk '{if ($1 == "*" || $1 == "+") print $2; else print $1}')
   do
     git branch -D "$x"
   done
