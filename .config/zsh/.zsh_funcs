@@ -39,9 +39,16 @@ gbc() {
 gwt() {
   if [ -z "$1" ]; then
     bin/worktree list
-  else
+  elif [ "$1" = "switch" ] || [ "$1" = "sw" ]; then
+    shift
     local target
-    target=$(bin/worktree switch "$1" --print-path) && cd "$target"
+    target=$(bin/worktree switch "$@" --print-path 2>/dev/null) && cd "$target" && echo "Switched to: $(basename "$target")" || echo "Worktree not found" >&2
+  elif [ "$1" = "list" ] || [ "$1" = "ls" ] || [ "$1" = "new" ] || [ "$1" = "delete" ] || [ "$1" = "rm" ] || [ "$1" = "submit" ] || [ "$1" = "pr" ] || [ "$1" = "help" ]; then
+    bin/worktree "$@"
+  else
+    # Default: treat bare arg as switch target
+    local target
+    target=$(bin/worktree switch "$@" --print-path 2>/dev/null) && cd "$target" && echo "Switched to: $(basename "$target")" || echo "Worktree not found: $1" >&2
   fi
 }
 
