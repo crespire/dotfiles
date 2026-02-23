@@ -40,7 +40,8 @@ gwt() {
   if [ -z "$1" ]; then
     bin/worktree list
   else
-    cd $(bin/worktree switch $1 --print-path)
+    local target
+    target=$(bin/worktree switch "$1" --print-path) && cd "$target"
   fi
 }
 
