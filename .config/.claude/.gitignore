@@ -5,6 +5,7 @@
 /file-history/*
 /paste-cache/*
 /session-env/*
+/sessions/*
 /shell-snapshots/*
 /statsig/*
 /telemetry/*

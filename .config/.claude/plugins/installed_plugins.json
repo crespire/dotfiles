@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "plugins": {
+    "ruby-lsp@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/simmonli/.claude/plugins/cache/claude-plugins-official/ruby-lsp/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-03-10T20:45:43.535Z",
+        "lastUpdated": "2026-03-10T20:45:43.535Z",
+        "gitCommitSha": "00f13a5f46419a78b5cc1a344e890cb404843881"
+      }
+    ]
+  }
+}
