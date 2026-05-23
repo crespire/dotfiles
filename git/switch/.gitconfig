@@ -1,3 +1,6 @@
 [user]
   name = 'Simmon Li'
   email = simmon@switchgrowth.com
+
+[gbc]
+  worktreeCleanup = bin/wt rm

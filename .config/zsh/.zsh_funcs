@@ -7,6 +7,38 @@ gbc() {
   echo "Refreshing local branch list..."
   git remote update origin --prune &>/dev/null
 
+  # Optional per-repo cleanup command for worktree-backed branches.
+  # Set via e.g. `[gbc] worktreeCleanup = bin/wt rm` in a gitconfig that's
+  # only included for the relevant repos (see git/switch/.gitconfig).
+  local wt_cleanup
+  wt_cleanup=$(git config --get gbc.worktreecleanup 2>/dev/null)
+
+  # Build branch -> worktree-basename map, identify the main worktree path.
+  # The main worktree is always the first entry from `git worktree list --porcelain`.
+  local -A wt_basename_for_branch
+  local main_wt_path=""
+  local cur_path="" cur_branch="" first=true
+  while IFS= read -r line; do
+    case "$line" in
+      "worktree "*)
+        cur_path="${line#worktree }"
+        if [[ "$first" == true ]]; then
+          main_wt_path="$cur_path"
+          first=false
+        fi
+        ;;
+      "branch refs/heads/"*)
+        cur_branch="${line#branch refs/heads/}"
+        ;;
+      "")
+        if [[ -n "$cur_branch" && -n "$cur_path" && "$cur_path" != "$main_wt_path" ]]; then
+          wt_basename_for_branch[$cur_branch]="${cur_path##*/}"
+        fi
+        cur_path="" cur_branch=""
+        ;;
+    esac
+  done < <(git worktree list --porcelain; echo)
+
   local current_branch=$(git branch --show-current)
   local needs_switch=false
 
@@ -20,20 +52,43 @@ gbc() {
     needs_switch=true
   fi
 
-  # Switch to main if current branch will be cleaned up
+  # Switch to main if current branch will be cleaned up. If we're inside a
+  # worktree, jump back to the main worktree first — `git checkout main` from
+  # within a worktree would fail because main is already checked out elsewhere.
   if [[ "$needs_switch" == true ]]; then
     echo "Current branch '$current_branch' will be cleaned up, switching to main..."
+    if [[ -n "$main_wt_path" && "$PWD" != "$main_wt_path" ]]; then
+      cd "$main_wt_path"
+    fi
     git checkout main
   fi
 
+  # Routes a single branch deletion: worktree-backed branches go through the
+  # configured cleanup command (which also removes the worktree dir and runs
+  # service/db teardown); everything else uses plain `git branch`.
+  _gbc_delete() {
+    local branch=$1 flag=$2
+    local wt_name=${wt_basename_for_branch[$branch]}
+    if [[ -n "$wt_name" && -n "$wt_cleanup" ]]; then
+      echo "  $branch -> worktree '$wt_name', running: $wt_cleanup $wt_name"
+      ( cd "${main_wt_path:-$PWD}" && yes y | eval "$wt_cleanup $wt_name" )
+    else
+      git branch "$flag" "$branch" 2>/dev/null
+    fi
+  }
+
   echo "Cleaning merged branches"
-  git branch --merged | grep -v 'main$' | xargs git branch -d 2>/dev/null
-  
+  for x in $(git branch --merged | sed 's/^[* +]*//' | grep -v '^main$'); do
+    _gbc_delete "$x" -d
+  done
+
   echo "Cleaning gone branches"
   for x in $(git branch -v | grep " \[gone\] " | awk '{if ($1 == "*" || $1 == "+") print $2; else print $1}')
   do
-    git branch -D "$x"
+    _gbc_delete "$x" -D
   done
+
+  unset -f _gbc_delete 2>/dev/null
 }
 
 gwt() {
