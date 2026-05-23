@@ -13,3 +13,6 @@ When reviewing:
 3. For any changes in behaviour, ensure that changes are put under test in a concrete and effective way. It is also usually a good idea to put in regression testing at the integration level where appropriate.
 4. For any suggestions in the code, provide supporting documentation as to why the change should be made, whether it's Ruby/Rails best practice, or some example in the codebase.
 5. Remember that repositories have supporting tooling like Sorbet and Rubocop to help enforce style and convention.
+
+
+After review, always present the results to the user for discussion. Do not start making edits right away.
