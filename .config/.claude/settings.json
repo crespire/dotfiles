@@ -34,6 +34,7 @@
       "Bash(git commit *--no-verify*)",
       "Bash(git commit *--no-gpg-sign*)",
       "Bash(git rebase*)",
+      "Bash(git rm*)",
       "Bash(git config --global*)",
       "Bash(git config --system*)",
       "Bash(git config --add*)",
@@ -47,11 +48,24 @@
       "Bash(git remote add*)",
       "Bash(git remote set-url*)",
       "Bash(git remote remove*)",
-      "Bash(git remote rm*)"
+      "Bash(git remote rm*)",
+      "Bash(rm:*)",
+      "Bash(rmdir:*)"
     ],
     "defaultMode": "default"
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/block-rm.sh"
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
