@@ -66,12 +66,16 @@ gbc() {
   # Routes a single branch deletion: worktree-backed branches go through the
   # configured cleanup command (which also removes the worktree dir and runs
   # service/db teardown); everything else uses plain `git branch`.
+  # The cleanup command runs interactively on purpose — it has its own guard
+  # against removing worktrees with unpushed commits, and answering its prompt
+  # by hand is how we keep local-only work from being torn down. Don't pipe
+  # `yes` into it.
   _gbc_delete() {
     local branch=$1 flag=$2
     local wt_name=${wt_basename_for_branch[$branch]}
     if [[ -n "$wt_name" && -n "$wt_cleanup" ]]; then
       echo "  $branch -> worktree '$wt_name', running: $wt_cleanup $wt_name"
-      ( cd "${main_wt_path:-$PWD}" && yes y | eval "$wt_cleanup $wt_name" )
+      ( cd "${main_wt_path:-$PWD}" && eval "$wt_cleanup $wt_name" )
     else
       git branch "$flag" "$branch" 2>/dev/null
     fi
