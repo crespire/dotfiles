@@ -1,14 +1,14 @@
 lazygit
 lazygit.tar.gz
 .config/gcloud/*
-!.config/gcloud/.keep
 .config/filezilla/*
-!.config/filezilla/.keep
 .config/go/*
-!.config/go/.keep
 .config/iterm2*
-!.config/iterm2/.keep
 .claude/*local*.*
 .config/.wrangler/*
-!.config/.wrangler/.keep
+.config/gh/*
 .DS_Store
+
+
+# Preserve directory structure
+!**/.keep
