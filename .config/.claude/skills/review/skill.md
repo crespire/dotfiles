@@ -35,8 +35,6 @@ When you do write the artifact, the contract the poster script parses:
 
 ```markdown
 <!-- review event=REQUEST_CHANGES -->
-# Review — <branch>
-
 <signpost-and-triage summary: name the blockers, calibrate the rest>
 
 ### MIN_BASELINE_DAYS

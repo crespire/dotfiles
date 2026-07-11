@@ -97,6 +97,7 @@
   },
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
+  "tui": "fullscreen",
   "editorMode": "vim",
   "preferredNotifChannel": "notifications_disabled",
   "skipAutoPermissionPrompt": true
