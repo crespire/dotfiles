@@ -17,11 +17,14 @@
 /chrome/*
 /memory/*
 /plugins/cache/*
+/daemon/*
+/jobs/*
 
 # Sensitive/local data
 /history.jsonl
 /stats-cache.json
 /.credentials.json
+daemon.log
 
 # Claude installer (system file, not user config)
 /install.sh
