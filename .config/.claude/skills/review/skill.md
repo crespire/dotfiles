@@ -1,5 +1,5 @@
 ---
-name: code-review
+name: review
 description: Review the current changes and provide feedback.
 ---
 
@@ -13,6 +13,7 @@ When reviewing:
 3. For any changes in behaviour, ensure that changes are put under test in a concrete and effective way. It is also usually a good idea to put in regression testing at the integration level where appropriate.
 4. For any suggestions in the code, provide supporting documentation as to why the change should be made, whether it's Ruby/Rails best practice, or some example in the codebase.
 5. Remember that repositories have supporting tooling like Sorbet and Rubocop to help enforce style and convention.
+6. Pay special attention to code smells and antipatterns in code, particularly shotgun surgery and divergent change patterns make reasoning about code difficult, especially if we have to jump through many different files.
 
 After review, always present the results to the user for discussion. Do not start making edits right away.
 
@@ -49,7 +50,7 @@ Anchor each inline finding to a line that's actually in the diff — the script 
 
 ## Posting (only when the user asks)
 
-Never post automatically — present for discussion first. When the user asks to push the review up:
+Never post automatically — present for discussion first. Post as a single review with line-anchored inline comments; never fall back to a body-only `gh pr review --body-file` dump for expediency. When a finding can't anchor to a diff line, flag the tradeoff before pushing. When the user asks to push the review up:
 
 ```
 ruby ~/.claude/scripts/post-review.rb tmp/pr_review.md          # dry run: parse, validate, preview
