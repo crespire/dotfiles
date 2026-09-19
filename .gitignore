@@ -24,3 +24,16 @@ lazygit.tar.gz
 
 # Preserve directory structure
 !**/.keep
+
+# Claude Code runtime state: timestamps, auth status, policy stamps and the
+# claude.ai-synced skills and plugins, which are re-downloaded on demand.
+# installed_plugins.json records absolute project paths, so it names private repos.
+.config/.claude/.last-cleanup
+.config/.claude/.last-update-result.json
+.config/.claude/daemon-auth-cooldown
+.config/.claude/daemon-auth-status.json
+.config/.claude/policy-limits.json.stamp.json
+.config/.claude/plugins/.last_inuse_sweep
+.config/.claude/plugins/installed_plugins.json
+.config/.claude/plugins/synced/
+.config/.claude/skills/synced/
