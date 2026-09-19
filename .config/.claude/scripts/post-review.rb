@@ -64,6 +64,12 @@ def sh(*cmd)
   out.strip
 end
 
+# Same as sh, but returns nil instead of aborting so the caller can fall back.
+def try_sh(*cmd)
+  out, _err, st = Open3.capture3(*cmd)
+  st.success? ? out.strip : nil
+end
+
 # --- resolve repo / PR / head commit via gh ----------------------------------
 
 repo = sh("gh", "repo", "view", "--json", "nameWithOwner", "-q", ".nameWithOwner")
@@ -83,7 +89,27 @@ pr_title = pr_fields.fetch("title", "")
 # unified diff into {path => Set[new_line_number]} so we can reject bad anchors
 # BEFORE posting (a single invalid comment 422s the whole review).
 
-diff = sh("gh", "pr", "diff", pr_number.to_s)
+diff = try_sh("gh", "pr", "diff", pr_number.to_s)
+
+if diff.nil?
+  # GitHub refuses the diff endpoint past 300 files (HTTP 406). Compute the same
+  # diff locally instead, which has no cap. Both sides are fetched into refs under
+  # refs/post-review/ so this never moves origin/* or FETCH_HEAD, and the merge base
+  # is used so the result matches what the PR shows rather than a two-dot diff.
+  base_ref = JSON.parse(
+    sh("gh", "pr", "view", pr_number.to_s, "--json", "baseRefName")
+  ).fetch("baseRefName")
+
+  warn "gh pr diff unavailable (likely >300 files); computing the diff locally"
+  sh("git", "fetch", "--quiet", "--force", "origin",
+    "refs/pull/#{pr_number}/head:refs/post-review/head")
+  sh("git", "fetch", "--quiet", "--force", "origin",
+    "#{base_ref}:refs/post-review/base")
+
+  base_sha = sh("git", "merge-base", "refs/post-review/base", "refs/post-review/head")
+  diff = sh("git", "diff", "--no-color", "--no-ext-diff", base_sha, "refs/post-review/head")
+end
+
 commentable = Hash.new { |h, k| h[k] = Set.new }
 current_path = nil
 new_line = nil
@@ -136,8 +162,14 @@ lines = text.lines.map(&:chomp)
 sections = []
 preamble = []
 cur = nil
+# Fenced blocks are skipped when looking for headings: a Ruby sketch's leading
+# `# comment` lines would otherwise read as H1s and truncate the comment they
+# belong to, silently dropping the rest of the finding.
+in_fence = false
 lines.each do |l|
-  if l.match?(/\A#{'#'}{1,6}\s/)
+  in_fence = !in_fence if l.match?(/\A\s*(```|~~~)/)
+
+  if !in_fence && l.match?(/\A#{'#'}{1,6}\s/)
     sections << cur if cur
     cur = {heading: l, lines: []}
   elsif cur
