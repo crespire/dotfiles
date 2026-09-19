@@ -1,0 +1,28 @@
+{
+  "_README": "Committed template. Real paths live in territory.local.json, which is gitignored; its top-level keys override the ones here. Copy this file to territory.local.json and edit that.",
+  "vault": "~/path/to/vault",
+  "directories": [
+    {
+      "path": "knowledge",
+      "mode": "consolidate"
+    },
+    {
+      "path": "Notes",
+      "mode": "tag-only"
+    }
+  ],
+  "exclude": [
+    {
+      "path": "knowledge/archive/**",
+      "why": "retired memories — processing them re-merges finished work"
+    },
+    {
+      "path": "knowledge/MEMORY.md",
+      "why": "the tag catalog; this skill writes it"
+    },
+    {
+      "path": "knowledge/DREAM.md",
+      "why": "the change proposal; this skill writes it"
+    }
+  ]
+}

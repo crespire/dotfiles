@@ -7,6 +7,18 @@ lazygit.tar.gz
 .claude/*local*.*
 .config/.wrangler/*
 .config/gh/*
+
+# Local overrides anywhere under the Claude config — real paths, vault locations and
+# anything else that should not reach a public repository.
+.config/.claude/**/*.local.json
+
+# dream skill: machine-local operational state, not config.
+# Snapshots are a full copy of the knowledge store per run, so tracking them would
+# put the vault's contents in this repo and grow it by ~200 files a night.
+.config/.claude/skills/dream/snapshots/
+.config/.claude/skills/dream/state.json
+.config/.claude/skills/dream/last-run.log
+
 .DS_Store
 
 
