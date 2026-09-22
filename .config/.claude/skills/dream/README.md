@@ -72,6 +72,12 @@ The LaunchAgent lives at `~/Library/LaunchAgents/com.<user>.claude-dream.plist` 
 at 04:00. `StartCalendarInterval` runs a missed job on the next wake, and coalesces several
 missed intervals into one run.
 
+`caffeinate -is` wraps the harness because the scheduled hour is an hour the machine sleeps.
+With the lid shut the system sleeps whatever `pmset sleep` says, and Power Nap then grants a
+LaunchAgent about 45 seconds per dark wake. Without the assertion the run advances one step
+per wake, every API stream dies mid-response, and the counter pass — a subagent that needs
+several minutes — is killed. The wrapper holds the machine awake for the length of the run.
+
 The job needs four environment variables, because launchd supplies no shell profile:
 
 | Variable | Reason |
@@ -102,6 +108,7 @@ launchd expands no variables, so every path below is literal. Substitute `<user>
   </dict>
   <key>ProgramArguments</key>
   <array>
+    <string>/usr/bin/caffeinate</string><string>-is</string>
     <string>/Users/<user>/.local/bin/claude</string>
     <string>-p</string><string>/dream</string>
     <string>--add-dir</string><string><vault></string>
@@ -126,6 +133,8 @@ start a run.
 - **The login keychain must be unlocked.** Credentials live there, not in a file. The
   keychain stays unlocked while the operator is logged in, including with the lid shut. After
   a restart the 04:00 run fails until the next login. `last-run.log` reports `Not logged in`.
+- **The machine must be on AC power.** `caffeinate -s` asserts nothing on battery, so a run
+  that starts on battery gets the 45-second dark-wake window and stalls partway.
 - **Obsidian should be closed at the scheduled hour.** The obsidian-git plugin commits hourly
   while Obsidian runs. With Obsidian closed, the run holds the repository alone and produces
   one commit. With Obsidian open, the plugin may commit part of the run first, and one run

@@ -357,6 +357,11 @@ Instruct it to:
 
 Append its findings to `DREAM.md`.
 
+If the counter agent dies rather than reports, spawn it again. The run is unattended, so a
+question back to the operator ends it at step 7 with the tree uncommitted and `state.json`
+still describing the previous night. Two failed attempts is enough: record the failure in
+`DREAM.md`, then finish step 8 anyway. An uncommitted run is worse than an unchecked one.
+
 ### 8. Record state, then commit
 
 Run `ruby ~/.claude/scripts/dream/state.rb --write`. It must run after the counter pass, so
