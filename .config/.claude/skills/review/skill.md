@@ -21,10 +21,18 @@ After review, always present the results to the user for discussion. Do not star
 
 First decide whose branch this is — it determines whether to write a file at all:
 
-- **Your own branch / a self-review** — the commits under review are authored by the current git user (`git log` author matches `git config user.email`), or you've been working this branch yourself in-session. **Do NOT write `tmp/pr_review.md`.** There's nothing to post to GitHub, so the artifact is just noise — present the findings inline in the conversation for discussion and we'll act on them directly.
-- **Someone else's branch / PR** — you're reviewing work you didn't author, to post comments back. Capture the review as **anchored markdown** in `tmp/pr_review.md` (create `tmp/` if needed) so `~/.claude/scripts/post-review.rb` can convert it into a single GitHub review with line-anchored inline comments. This is a working draft — `tmp/` gets wiped periodically — not the system of record.
+- **Your own branch / a self-review** — the commits under review are authored by the current git user (`git log` author matches `git config user.email`), or you've been working this branch yourself in-session. **Do NOT write a review artifact.** There's nothing to post to GitHub, so the artifact is just noise — present the findings inline in the conversation for discussion and we'll act on them directly.
+- **Someone else's branch / PR** — you're reviewing work you didn't author, to post comments back. Capture the review as **anchored markdown** (create `tmp/` if needed) so `~/.claude/scripts/post-review.rb` can convert it into a single GitHub review with line-anchored inline comments. This is a working draft — `tmp/` gets wiped periodically — not the system of record.
 
 When it's genuinely ambiguous who owns the branch, ask before writing the file.
+
+### Naming the artifact
+
+`tmp/pr<NUMBER>_review-<YYYY-MM-DD-HHMM>.md`, e.g. `tmp/pr3018_review-2026-09-21-1702.md`.
+
+The PR number is what tells you which review a stale draft belongs to once several accumulate in `tmp/`. The time is not decoration: a submitted GitHub review is closed, so a second pass on the same PR — a deeper read, a late agent's findings, a re-review after the author pushes — goes up as its own review, and a date-only name would silently overwrite the first one's draft. Read the clock when you write the file, use local time, and keep that one filename for every edit and the dry-run/post cycle of that single review. Sorting the directory then reads as the review history.
+
+With no PR number — a branch with no PR yet, or a path-scoped review — use the slugified branch name in place of `pr<NUMBER>`.
 
 Either way, follow the PR-review voice/length rules in `~/.claude/CLAUDE.md` (conversational, 1–3 sentences per inline, no severity tags or headlines, backticks on identifiers).
 
@@ -53,8 +61,8 @@ Anchor each inline finding to a line that's actually in the diff — the script 
 Never post automatically — present for discussion first. Post as a single review with line-anchored inline comments; never fall back to a body-only `gh pr review --body-file` dump for expediency. When a finding can't anchor to a diff line, flag the tradeoff before pushing. When the user asks to push the review up:
 
 ```
-ruby ~/.claude/scripts/post-review.rb tmp/pr_review.md          # dry run: parse, validate, preview
-ruby ~/.claude/scripts/post-review.rb tmp/pr_review.md --post   # actually submit
+ruby ~/.claude/scripts/post-review.rb tmp/pr3018_review-2026-09-21-1702.md          # dry run: parse, validate, preview
+ruby ~/.claude/scripts/post-review.rb tmp/pr3018_review-2026-09-21-1702.md --post   # actually submit
 ```
 
-The dry run resolves the PR + head commit via `gh`, validates every comment against the diff, and previews the body + inline comments. Run it first, surface any anchor problems, then post with `--post` once the user confirms. Pass `--pr N` to target a specific PR. If the script is missing (fresh repo, wiped `tmp`, new machine), rebuild it from this contract — it shells out to `gh api .../pulls/{n}/reviews`.
+Always name the file explicitly, both times, and make it the one you just wrote — with several drafts in `tmp/` the argument is the only thing that says which review is going up. The dry run resolves the PR + head commit via `gh`, validates every comment against the diff, and previews the body + inline comments. Run it first, surface any anchor problems, then post with `--post` once the user confirms. Pass `--pr N` to target a specific PR. If the script is missing (fresh repo, wiped `tmp`, new machine), rebuild it from this contract — it shells out to `gh api .../pulls/{n}/reviews`.

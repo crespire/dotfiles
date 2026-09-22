@@ -8,7 +8,10 @@
 # repos — it shells out to `gh` and reads whatever review file you point it at.
 #
 # USAGE
-#   ruby ~/.claude/scripts/post-review.rb [tmp/pr_review.md] [--pr N] [--event E] [--post]
+#   ruby ~/.claude/scripts/post-review.rb [tmp/pr3018_review-2026-09-21-1702.md] [--pr N] [--event E] [--post]
+#
+#   With no path it takes the newest tmp/*_review-*.md. Pass it explicitly when
+#   several drafts exist — that argument is the only thing naming which one posts.
 #
 #   Default is a DRY RUN: it parses, validates every comment against the PR diff,
 #   and prints a preview. Nothing is sent until you pass --post (outward-facing).
@@ -55,8 +58,18 @@ ARGV.each do |a|
   end
 end
 
-file ||= "tmp/pr_review.md"
-abort "review file not found: #{file}" unless File.file?(file)
+# No path given: take the most recently written draft. Reviews are named
+# tmp/pr<N>_review-<YYYY-MM-DD-HHMM>.md, so several accumulate per repo and the
+# newest is the one being worked on. tmp/pr_review.md is the pre-2026-09 name,
+# kept so an old draft still posts. Prefer passing the path explicitly — with
+# more than one draft around, the argument is what says which review goes up.
+if file.nil?
+  candidates = Dir.glob("tmp/*_review-*.md") + Dir.glob("tmp/pr_review.md")
+  file = candidates.select { |f| File.file?(f) }.max_by { |f| File.mtime(f) }
+  warn "no review file given; using most recent: #{file}" if file
+end
+
+abort "review file not found: #{file || "tmp/pr<N>_review-<YYYY-MM-DD-HHMM>.md"}" unless file && File.file?(file)
 
 def sh(*cmd)
   out, err, st = Open3.capture3(*cmd)
