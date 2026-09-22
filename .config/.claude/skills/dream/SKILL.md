@@ -197,12 +197,12 @@ failure. Fold near-synonyms together each run (see below).
 ## What each run does
 
 `ruby ~/.claude/scripts/dream/state.rb --list` names the files to process: those whose
-content hash differs from the last run's, plus any file with no `tags:` key. A full re-read
+content hash differs from the last run's, plus any file with no top-level `tags:` key. A full re-read
 of an unchanged store wastes the run and risks churn. The hashes live in `state.json` rather
 than in a frontmatter field, so incremental processing never depends on a key auto-memory
 could overwrite.
 
-### 1. Snapshot
+### 1. Snapshot, prune, hoist
 
 `ruby ~/.claude/scripts/dream/snapshot.rb --write`.
 
@@ -222,6 +222,22 @@ Prune at the start of each run with `ruby ~/.claude/scripts/dream/prune.rb --wri
 improvise a shell delete: `block-rm.sh` refuses any `rm` — including via `find -exec` and
 `xargs` — and `bypassPermissions` does not lift a hook, so the run would stall waiting on a
 denial nobody is there to clear.
+
+Then `ruby ~/.claude/scripts/dream/hoist_tags.rb --write`, **before `state.rb --list`**.
+Auto-memory rewrites a memory's frontmatter whenever it touches the file, and a top-level
+`tags:` key comes back nested inside the `metadata:` mapping. Every reader here matches
+`tags:` at column zero, so the file reads as untagged: selection takes it, and step 2 tags it
+from scratch over the tags the session that wrote the memory chose. Running the hoist first
+means the run tags what it restored rather than writing across it.
+
+The pass moves a key and never edits a tag value. It unions when a file carries both copies,
+and refuses the shapes it cannot read exactly — a nested key with nothing under it, a flow
+sequence that does not close on its line, a ragged list, two keys where one belongs. It
+verifies the frontmatter still parses and still holds every other key before it writes.
+**Read the output**; the exit status is non-zero when any file was refused.
+
+A refusal is safe to leave for a human, but the file stays invisible to grep until someone
+fixes it, so report it in `DREAM.md` rather than passing over it.
 
 ### 2. Tag
 

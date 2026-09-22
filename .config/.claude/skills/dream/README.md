@@ -19,7 +19,7 @@ invocation, and only the `description` in that file's frontmatter enters context
 | `~/.claude/skills/dream/state.json` | Content hash per file, for incremental runs. | no |
 | `~/.claude/skills/dream/snapshots/` | Pre-run copies. Pruned at 14 days. | no |
 | `~/.claude/skills/dream/last-run.log` | stdout and stderr of the scheduled run. | no |
-| `~/.claude/scripts/dream/` | The harness: eight scripts and a selftest. | yes |
+| `~/.claude/scripts/dream/` | The harness: nine scripts and a selftest. | yes |
 | `$VAULT/knowledge/` | The store. Files are the system of record. | in the vault |
 
 The four untracked paths are machine-local and appear in the dotfiles `.gitignore`.
@@ -166,15 +166,30 @@ and stays on launchd's PATH.
 ## Execution
 
 `state.rb --list` names the files a run processes: those whose content hash differs from the
-last run's, plus any file with no `tags:` key. The first run after a reset processes
+last run's, plus any file with no top-level `tags:` key. The first run after a reset processes
 everything.
 
-### 1. Snapshot
+### 1. Snapshot, prune, hoist
 
 `snapshot.rb --write` copies every in-scope file to `snapshots/<date>/`, outside the vault —
 not a predicted subset, since steps 3 and 4 touch files the hash check never selected. The
 counter pass compares against these copies, and they survive a `git reset --hard`. `prune.rb`
 removes directories older than 14 days.
+
+`hoist_tags.rb --write` then lifts any `tags:` key that sits inside the `metadata:` mapping
+back to the top level, and it must run before `state.rb --list`.
+
+Auto-memory rewrites a memory's frontmatter as YAML whenever it touches the file, and a
+top-level `tags:` comes back nested under `metadata:`. Every reader in this harness matches
+`tags:` at column zero, so a file carrying six considered tags reports as untagged. Left
+alone, selection takes it and step 2 tags it from scratch over the judgement of the session
+that wrote the memory, while the buried copy waits for the next run to trip over again.
+
+The pass moves a key. It never edits a tag value, it unions when a file holds both copies,
+and it refuses every shape it cannot read exactly, verifying that the frontmatter still
+parses and still carries every other key before it writes. `validate.rb` reports a buried key
+as its own failure rather than as `untagged`, because the two need opposite responses: a
+buried key needs this script, an untagged file needs a tagging judgement.
 
 ### 2. Tag
 
@@ -268,6 +283,7 @@ out of territory.
 | `snapshot.rb` | yes | Copies every in-scope file to a dated directory outside the vault. |
 | `state.rb` | yes | Content hashes. `--list` names the files a run should process. |
 | `prune.rb` | yes | Removes snapshot directories past the retention window. `--days N` overrides the default 14. |
+| `hoist_tags.rb` | yes | Lifts a `tags:` key out of `metadata:` to the top level. Moves a key, never edits a value. Exit 1 on refusal. |
 
 Every writer is dry-run by default, takes `--write`, and exits non-zero when it refused a
 file. `DREAM_TERRITORY` and `DREAM_STATE` override the config and state paths; `lib.rb`

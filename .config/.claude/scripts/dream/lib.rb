@@ -180,10 +180,24 @@ module Dream
       return {style: :inline, first: first, last: first, tags: tags, indent: nil, suffix: suffix}
     end
 
-    last = first
+    seq = read_sequence(fm, first + 1)
+    style = seq[:indents].uniq.size > 1 ? :ragged : :block
+    {style: style, first: first, last: seq[:last], tags: seq[:tags],
+     indent: seq[:indents].first || "  ", suffix: nil}
+  end
+
+  # Reads a `- value` sequence from `from`, stopping at the first line that is not one.
+  # Both the top-level and the nested reader use it: two copies of this drift, and the copy
+  # that drifts is the one that forgets to strip a trailing comment, leaving a tag value
+  # of "salesforce # note" that no later script can match or rename.
+  #
+  # `last` comes back as `from - 1` for an empty sequence, so a caller splicing first..last
+  # replaces the key line alone rather than a range that runs backwards.
+  def read_sequence(fm, from, upto = fm[:close])
+    last = from - 1
     tags = []
     indents = []
-    ((first + 1)...fm[:close]).each do |i|
+    (from...upto).each do |i|
       # chomp first: the indent group must not treat the line's newline as trailing space.
       match = fm[:lines][i].chomp.match(/\A([ \t]*)-[ \t]+(.+?)[ \t]*\z/)
       break if match.nil?
@@ -195,9 +209,50 @@ module Dream
       tags << unquote(value)
       last = i
     end
+    {tags: tags, last: last, indents: indents}
+  end
 
-    style = indents.uniq.size > 1 ? :ragged : :block
-    {style: style, first: first, last: last, tags: tags, indent: indents.first || "  ", suffix: nil}
+  # Locates a `tags:` key that lives inside the `metadata:` mapping. Auto-memory rewrites a
+  # memory's frontmatter as YAML and absorbs a top-level `tags:` key into that mapping, which
+  # is where such a key comes from. Every reader here matches `tags:` at column zero, so the
+  # file reports as untagged although it carries the tags a session chose deliberately, and
+  # the next run tags it again from scratch over that judgement.
+  #
+  # Only inside `metadata:`. A `tags:` under some other key is a shape nobody has seen here,
+  # and lifting a value out of a mapping that meant something by it is not a repair.
+  #
+  # => {style: :inline|:block|:ragged|:duplicate|:empty, first:, last:, tags:} or nil.
+  def nested_tag_block(fm)
+    return nil if fm[:close].nil?
+    meta = (1...fm[:close]).find { |i| fm[:lines][i].start_with?("metadata:") }
+    return nil if meta.nil?
+
+    # The mapping ends at the next key in column zero. Scanning to the fence instead would
+    # reach a `tags:` under some later top-level key, which is not nested at all.
+    stop = ((meta + 1)...fm[:close]).find { |i| fm[:lines][i].match?(/\A\S/) } || fm[:close]
+
+    keys = ((meta + 1)...stop).select { |i| fm[:lines][i].match?(/\A[ \t]+tags:/) }
+    return nil if keys.empty?
+    first = keys.first
+    return {style: :duplicate, first: first, last: first, tags: []} if keys.size > 1
+
+    inline = fm[:lines][first].sub(/\A[ \t]+tags:[ \t]*/, "").rstrip
+    unless inline.empty?
+      if inline.start_with?("[") && !inline.include?("]")
+        return {style: :unterminated, first: first, last: first, tags: []}
+      end
+      body, = inline.partition("]")
+      tags = body.sub(/\A\[/, "").split(",").map { |t| unquote(t.strip) }.reject(&:empty?)
+      return {style: :inline, first: first, last: first, tags: tags}
+    end
+
+    seq = read_sequence(fm, first + 1, stop)
+    # A key with nothing under it is not an empty tag list: YAML reads the value as nil, and
+    # whatever the writer meant, removing the key is a guess. Refuse rather than hoist `[]`.
+    return {style: :empty, first: first, last: first, tags: []} if seq[:tags].empty?
+
+    style = seq[:indents].uniq.size > 1 ? :ragged : :block
+    {style: style, first: first, last: seq[:last], tags: seq[:tags]}
   end
 
   # Renders tags in the given style, as the lines to splice in place of first..last.

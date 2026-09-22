@@ -109,6 +109,83 @@ DUPLICATE_KEYS = <<~MD
   Body.
 MD
 
+# What auto-memory leaves behind after it rewrites a memory it touched: the tags a session
+# chose, absorbed into the metadata mapping where every reader here misses them.
+BURIED = <<~MD
+  ---
+  name: feedback-buried
+  description: "Tags a session chose, buried by a rewrite"
+  metadata:
+    node_type: memory
+    tags:
+      - scope/portable
+      - form/preference
+      - ruby
+    type: feedback
+    originSessionId: abc123
+  ---
+
+  Body of the buried note — em-dashed.
+MD
+
+# The same burial in flow style.
+BURIED_INLINE = <<~MD
+  ---
+  name: feedback-buried-inline
+  metadata:
+    node_type: memory
+    tags: [scope/local, form/artifact, switch]
+    type: feedback
+  ---
+
+  Body.
+MD
+
+# A run tagged the file, then a rewrite buried a second copy. Neither side may be dropped:
+# each holds a tag the other does not.
+BURIED_AND_TOP = <<~MD
+  ---
+  name: feedback-both
+  tags: [scope/portable, form/pattern, ruby]
+  metadata:
+    node_type: memory
+    tags:
+      - scope/portable
+      - testing
+    type: feedback
+  ---
+
+  Body.
+MD
+
+# A nested key with nothing under it. YAML reads the value as nil, so what the writer meant
+# is a guess, and hoisting it would assert an empty tag list the file never declared.
+BURIED_EMPTY = <<~MD
+  ---
+  name: feedback-empty
+  metadata:
+    node_type: memory
+    tags:
+    type: feedback
+  ---
+
+  Body.
+MD
+
+# `tags:` inside a mapping that is not `metadata:`. Lifting a value out of a mapping that
+# meant something by it is not a repair, so this file must come through untouched.
+NESTED_ELSEWHERE = <<~MD
+  ---
+  title: Elsewhere
+  tags: [switch]
+  frontmatter_of_something_else:
+    tags:
+      - not-ours
+  ---
+
+  Body.
+MD
+
 BROKEN = <<~MD
   ---
   name: broken
@@ -178,6 +255,11 @@ Dir.mktmpdir("dream-selftest") do |root|
 
   write = ->(rel, body) { File.write(File.join(vault, rel), body) }
   write.("knowledge/reference_example.md", MEMORY)
+  write.("knowledge/buried.md", BURIED)
+  write.("knowledge/buried_inline.md", BURIED_INLINE)
+  write.("knowledge/buried_and_top.md", BURIED_AND_TOP)
+  write.("knowledge/buried_empty.md", BURIED_EMPTY)
+  write.("Notes/elsewhere.md", NESTED_ELSEWHERE)
   write.("knowledge/broken.md", BROKEN)
   write.("knowledge/dupkeys.md", DUPLICATE_KEYS)
   write.("knowledge/MEMORY.md", "# Memory\n\n## Tag catalog\n")
@@ -224,9 +306,11 @@ Dir.mktmpdir("dream-selftest") do |root|
   # --- scope -------------------------------------------------------------------------
   rels = Dream.files.map(&:first)
   expected = ["Notes/Nested/tagged.md", "Notes/[WIP] plan.md", "Notes/bare.md", "Notes/block.md",
-              "Notes/commented.md", "Notes/fence.md", "Notes/hrule.md", "Notes/ragged.md",
-              "Notes/wrapped.md", "Notes/zero.md",
-              "knowledge/broken.md", "knowledge/dupkeys.md", "knowledge/reference_example.md"]
+              "Notes/commented.md", "Notes/elsewhere.md", "Notes/fence.md", "Notes/hrule.md",
+              "Notes/ragged.md", "Notes/wrapped.md", "Notes/zero.md",
+              "knowledge/broken.md", "knowledge/buried.md", "knowledge/buried_and_top.md",
+              "knowledge/buried_empty.md", "knowledge/buried_inline.md",
+              "knowledge/dupkeys.md", "knowledge/reference_example.md"]
 
   check("finds every in-scope file, and only those") { rels.sort == expected.sort }
   check("excludes an archive subtree") { rels.none? { |r| r.include?("archive/") } }
@@ -273,12 +357,93 @@ Dir.mktmpdir("dream-selftest") do |root|
     b[:style] == :duplicate && !Dream.writable_tags?(b)
   end
 
+  # --- buried tags ---------------------------------------------------------------------
+  # The failure this guards against is silent in both directions: a buried key reads as no
+  # tags at all, and a hoist that splices carelessly loses every other frontmatter key.
+  check("reads a buried block sequence") do
+    b = Dream.nested_tag_block(Dream.frontmatter(BURIED))
+    b[:style] == :block && b[:tags] == ["scope/portable", "form/preference", "ruby"]
+  end
+  check("reads a buried flow sequence") do
+    b = Dream.nested_tag_block(Dream.frontmatter(BURIED_INLINE))
+    b[:style] == :inline && b[:tags] == ["scope/local", "form/artifact", "switch"]
+  end
+  check("refuses a buried key with nothing under it") do
+    Dream.nested_tag_block(Dream.frontmatter(BURIED_EMPTY))[:style] == :empty
+  end
+  check("ignores a tags key nested under some other mapping") do
+    Dream.nested_tag_block(Dream.frontmatter(NESTED_ELSEWHERE)).nil?
+  end
+  check("reports no buried key on a file tagged at the top level") do
+    Dream.nested_tag_block(Dream.frontmatter(BLOCK_NOTE)).nil? &&
+      Dream.nested_tag_block(Dream.frontmatter(MEMORY)).nil?
+  end
+  check("a buried key still reads as untagged at the top level") do
+    Dream.tag_block(Dream.frontmatter(BURIED)).nil?
+  end
+
+  ho1, hs1 = run.("hoist_tags.rb")
+  check("hoist dry run changes nothing on disk") do
+    File.read(File.join(vault, "knowledge/buried.md")) == BURIED
+  end
+  check("hoist dry run names every buried file") do
+    %w[buried.md buried_inline.md buried_and_top.md].all? { |f| ho1.include?(f) }
+  end
+  check("hoist exits nonzero when it refuses a file") { !hs1.success? && ho1.include?("EMPTY") }
+
+  run.("hoist_tags.rb", "--write")
+  hoisted = frontmatter_of(File.join(vault, "knowledge/buried.md"))
+  check("hoist lifts the tags to the top level") do
+    hoisted["tags"] == ["scope/portable", "form/preference", "ruby"]
+  end
+  check("hoist removes the buried copy") do
+    !hoisted["metadata"].key?("tags")
+  end
+  check("hoist keeps every other frontmatter key") do
+    hoisted["name"] == "feedback-buried" &&
+      hoisted["description"] == "Tags a session chose, buried by a rewrite" &&
+      hoisted["metadata"]["node_type"] == "memory" &&
+      hoisted["metadata"]["type"] == "feedback" &&
+      hoisted["metadata"]["originSessionId"] == "abc123"
+  end
+  check("hoist leaves the body untouched") do
+    body_of(File.read(File.join(vault, "knowledge/buried.md"))) == body_of(BURIED)
+  end
+  check("hoist unions a buried copy with the top-level one") do
+    frontmatter_of(File.join(vault, "knowledge/buried_and_top.md"))["tags"] ==
+      ["scope/portable", "form/pattern", "ruby", "testing"]
+  end
+  check("hoist refuses the empty key rather than writing tags: []") do
+    fm = frontmatter_of(File.join(vault, "knowledge/buried_empty.md"))
+    !fm.key?("tags") && fm["metadata"].key?("tags")
+  end
+  check("hoist does not touch a tags key under another mapping") do
+    File.read(File.join(vault, "Notes/elsewhere.md")) == NESTED_ELSEWHERE
+  end
+  check("a hoisted file is tagged as far as every other script is concerned") do
+    Dream.tags_for(Dream.read("knowledge/buried.md")) ==
+      ["scope/portable", "form/preference", "ruby"]
+  end
+
+  ho2, hs2 = run.("hoist_tags.rb", "--write")
+  check("hoist is idempotent") do
+    hs2.success? == false && ho2.include?("buried tag keys: 0") &&
+      frontmatter_of(File.join(vault, "knowledge/buried.md"))["tags"].size == 3
+  end
+
   # --- apply_tags ---------------------------------------------------------------------
   table = File.join(root, "tags.tsv")
   File.write(table, [
     "knowledge/reference_example.md\tscope/portable form/pattern ruby",
     "knowledge/broken.md\tscope/local form/artifact",
     "knowledge/dupkeys.md\tscope/local form/artifact",
+    # The hoisted files carry these already, so apply_tags must report them unchanged: the
+    # run tags what hoist restored rather than writing over it.
+    "knowledge/buried.md\tscope/portable form/preference ruby",
+    "knowledge/buried_inline.md\tscope/local form/artifact switch",
+    "knowledge/buried_and_top.md\tscope/portable form/pattern ruby testing",
+    "knowledge/buried_empty.md\tscope/local form/artifact",
+    "Notes/elsewhere.md\tscope/local form/artifact switch",
     "Notes/bare.md\tscope/local form/artifact runbook",
     "Notes/[WIP] plan.md\tscope/local form/artifact",
     "Notes/block.md\tscope/domain form/pattern boost",
@@ -363,7 +528,7 @@ Dir.mktmpdir("dream-selftest") do |root|
   end
 
   out2, _ = run.("apply_tags.rb", table, "--write")
-  check("is idempotent — a second apply changes nothing") { out2.match?(/unchanged: 8/) }
+  check("is idempotent — a second apply changes nothing") { out2.match?(/unchanged: 13/) }
 
   clean = File.join(root, "clean.tsv")
   File.write(clean, "Notes/bare.md\tscope/local form/artifact runbook\n")

@@ -49,7 +49,16 @@ Dream.files.each do |rel, _mode|
 
   block = Dream.tag_block(fm)
   if block.nil?
-    failures["untagged"] << rel
+    # Name the two apart. A file whose tags are buried under `metadata:` carries tags a
+    # session chose and needs `hoist_tags.rb`; one reported as untagged needs a tagging
+    # judgement. Reported as the same finding, the first gets retagged from scratch and the
+    # deliberate tags are lost without anyone seeing them go.
+    buried = Dream.nested_tag_block(fm)
+    if buried && !buried[:tags].empty?
+      failures["tags buried under metadata: — run hoist_tags.rb"] << "#{rel} #{buried[:tags].inspect}"
+    else
+      failures["untagged"] << rel
+    end
     next
   end
 
