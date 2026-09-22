@@ -35,5 +35,6 @@ lazygit.tar.gz
 .config/.claude/policy-limits.json.stamp.json
 .config/.claude/plugins/.last_inuse_sweep
 .config/.claude/plugins/installed_plugins.json
+.config/.claude/plugins/known_marketplaces.json
 .config/.claude/plugins/synced/
 .config/.claude/skills/synced/
