@@ -38,3 +38,9 @@ lazygit.tar.gz
 .config/.claude/plugins/known_marketplaces.json
 .config/.claude/plugins/synced/
 .config/.claude/skills/synced/
+
+# Scratch: review drafts, patches, anything a run needs to look at later.
+# CLAUDE.md sends working files here rather than /tmp, so the directory itself
+# is tracked and its contents are not.
+tmp/*
+!tmp/.keep
