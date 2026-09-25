@@ -108,21 +108,19 @@ launchd expands no variables, so every path below is literal. Substitute `<user>
   </dict>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/bin/caffeinate</string><string>-is</string>
-    <string>/Users/<user>/.local/bin/claude</string>
-    <string>-p</string><string>/dream</string>
-    <string>--add-dir</string><string><vault></string>
-    <string>--permission-mode</string><string>bypassPermissions</string>
-    <string>--settings</string>
-    <string>{"autoMemoryEnabled":false,"skipDangerousModePermissionPrompt":true}</string>
+    <string>/bin/sh</string><string>-c</string>
+    <string>exec /usr/bin/caffeinate -is /Users/<user>/.local/bin/claude -p /dream --add-dir <vault> --permission-mode bypassPermissions --settings '{"autoMemoryEnabled":false,"skipDangerousModePermissionPrompt":true}' &gt; /Users/<user>/.claude/skills/dream/last-run.log 2&gt;&amp;1</string>
   </array>
   <key>WorkingDirectory</key><string><vault></string>
-  <key>StandardOutPath</key><string>/Users/<user>/.claude/skills/dream/last-run.log</string>
-  <key>StandardErrorPath</key><string>/Users/<user>/.claude/skills/dream/last-run.log</string>
   <key>RunAtLoad</key><false/>
 </dict>
 </plist>
 ```
+
+The job runs through `/bin/sh` so that the `>` redirect truncates `last-run.log` at the start
+of each run. launchd opens `StandardOutPath` in append mode, so with that key the log holds
+every run and the latest report is at the bottom. `exec` replaces the shell, so launchd still
+tracks the `caffeinate` process and its exit code.
 
 Check it with `plutil -lint <path>`, then `launchctl load <path>`. Unload with
 `launchctl unload <path>`. `RunAtLoad` is false deliberately: loading the agent should not
