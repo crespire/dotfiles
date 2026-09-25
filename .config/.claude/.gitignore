@@ -19,6 +19,7 @@
 /plugins/cache/*
 /daemon/*
 /jobs/*
+/state/*
 
 # Sensitive/local data
 /history.jsonl
@@ -32,8 +33,14 @@ daemon.log
 # MacOS
 .DS_Store
 
-# Cache
-*cache.json
+# Claude Code writes its runtime state as JSON and lock files. Ignore them all and track the
+# config by exception, so each new state file needs no entry of its own.
+*.json
+*.lock
+!/settings.json
+!/keybindings.json
+!/plugins/blocklist.json
+!/skills/dream/territory.json
 
 # Marketplace plugins (can be re-fetched)
 /plugins/marketplaces/
