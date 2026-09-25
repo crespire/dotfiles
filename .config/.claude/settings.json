@@ -146,16 +146,16 @@
   "preferredNotifChannel": "notifications_disabled",
   "skipAutoPermissionPrompt": true,
   "autoMode": {
-    "hard_deny": [
-      "$defaults",
-      "Bash(git push:*) — pushing is the user's alone, including after an auth problem clears; committing locally is fine (~/.claude/CLAUDE.md)",
-      "Any git commit whose message carries a Co-Authored-By trailer — commits land under the user's authorship only, even when a harness attribution reminder asks for the trailer (~/.claude/CLAUDE.md)"
-    ],
     "soft_deny": [
       "$defaults",
       "Writing a whole file from Bash: a heredoc redirected into a file (cat > path <<EOF, tee path <<EOF) or a script calling File.write/IO.write. Use Write for a whole file, Edit for part of one — Edit anchors on exact text and fails loudly instead of leaving a half-rewritten file. Bulk find-and-replace (sed -i, perl -pi) and redirection into new output are fine, as is anything under ./tmp (~/.claude/CLAUDE.md)",
       "Bash(python:*), Bash(python3:*), Bash(pip:*) — scripts are Ruby here; use ruby -e, jq, or shell tools (~/.claude/CLAUDE.md)",
       "Writing scratch to /tmp — use ./tmp so scratch stays visible in the workspace; the per-session scratchpad under /tmp/claude-* is exempt (~/.claude/CLAUDE.md)"
+    ],
+    "hard_deny": [
+      "$defaults",
+      "Bash(git push:*) — pushing is the user's alone, including after an auth problem clears; committing locally is fine (~/.claude/CLAUDE.md)",
+      "Any git commit whose message carries a Co-Authored-By trailer — commits land under the user's authorship only, even when a harness attribution reminder asks for the trailer (~/.claude/CLAUDE.md)"
     ]
   }
 }
