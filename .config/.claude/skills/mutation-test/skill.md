@@ -22,12 +22,15 @@ makes load-bearing.
 ## Workflow
 
 1. **Read the diff and name the failure modes** (free-form — see below).
-2. **Write the table** to `./tmp/mutants/table.rb`.
-3. **Preflight**: `ruby ~/.claude/scripts/mutate.rb tmp/mutants/table.rb --check`.
-4. **Run**: `ruby ~/.claude/scripts/mutate.rb tmp/mutants/table.rb`. It proves the baseline is
+2. **Write the table** to `./tmp/mutants/<work>/table.rb`. `<work>` names the change: the Linear
+   ref or PR descriptor, e.g. `eng-1771-retry-budget`, never a bare number. The runner refuses a
+   table directly in `tmp/mutants/`, because runs in that shared folder overwrite each other's
+   ledger and pristine copies.
+3. **Preflight**: `ruby ~/.claude/scripts/mutate.rb tmp/mutants/<work>/table.rb --check`.
+4. **Run**: `ruby ~/.claude/scripts/mutate.rb tmp/mutants/<work>/table.rb`. It proves the baseline is
    green first, then applies one mutant at a time and restores between each.
 5. **Triage every survivor**, close real gaps, re-run to confirm the kill.
-6. **Finish**: the runner regenerates `tmp/mutants/mutations.md`. Fill in the triage prose, then
+6. **Finish**: the runner regenerates `tmp/mutants/<work>/mutations.md`. Fill in the triage prose, then
    `--clean` to drop scratch. `table.rb` plus `mutations.md` make the run reproducible.
 
 The runner never guesses. It reports `killed`, `SURVIVED`, `equivalent`, `INVALID` (the suite did
@@ -35,7 +38,12 @@ not load — not a result), and `NOT APPLIED` (anchor drift — also not a resul
 
 **Mutate in place.** Do not copy the target into `tmp/` and point rspec at the copy; Rails
 autoload resolves by path, so the copy is never loaded and every mutant "survives". The runner
-keeps a byte copy in `tmp/mutants/pristine/` purely for recovery from a hard kill.
+keeps a byte copy in `tmp/mutants/<work>/pristine/` purely for recovery from a hard kill.
+
+**One mutating run per checkout.** A separate folder isolates the outputs, not the code. A second
+run in the same checkout loads the first run's mutants, so its results mean nothing. The runner
+holds `tmp/mutants/.run.lock` while it mutates and refuses a second run. To run two at once, give
+each its own worktree. `--check`, `--report` and `--clean` do not take the lock.
 
 ## Discovering mutants — deliberately free-form
 
@@ -115,7 +123,7 @@ about the gap frequently fails to kill it.
 
 ## The write-up
 
-`tmp/mutants/mutations.md` is regenerated from the ledger every run, so the tally never drifts.
+`tmp/mutants/<work>/mutations.md` is regenerated from the ledger every run, so the tally never drifts.
 What it cannot write is the triage: each survivor gets a `<!-- TRIAGE -->` placeholder. Replace it
 with the argument. A survivor with no argument is worth nothing on the next run.
 

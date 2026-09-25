@@ -7,18 +7,28 @@
 # A mutant that leaves the suite green ("SURVIVED") is a claim nothing tests. It is either a
 # coverage gap or an equivalent mutant, and the difference has to be argued, not assumed.
 #
-#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/table.rb
-#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/table.rb --only M07
-#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/table.rb --check     # anchors only, no specs
-#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/table.rb --report    # rebuild the summary, run nothing
-#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/table.rb --clean     # drop scratch, keep the reproducible set
+#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/<work>/table.rb
+#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/<work>/table.rb --only M07
+#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/<work>/table.rb --check     # anchors only, no specs
+#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/<work>/table.rb --report    # rebuild the summary, run nothing
+#   ruby ~/.claude/scripts/mutate.rb tmp/mutants/<work>/table.rb --clean     # drop scratch, keep the reproducible set
 #
-# Convention: everything lives in ./tmp/mutants/ —
+# Convention: each piece of work gets its own folder, ./tmp/mutants/<work>/, where <work> names
+# the change (a Linear ref or PR descriptor, e.g. eng-1771-retry-budget). The runner writes every
+# output next to the table, so separate folders keep separate ledgers and pristine copies:
 #
-#   tmp/mutants/table.rb            the mutant table (the input; this is the artifact worth keeping)
-#   tmp/mutants/table.ledger.json   machine-readable results, merged across runs
-#   tmp/mutants/mutations.md        the human write-up, regenerated from the ledger
-#   tmp/mutants/pristine/           byte copies of each target before its first mutation (scratch)
+#   tmp/mutants/<work>/table.rb            the mutant table (the input; the artifact worth keeping)
+#   tmp/mutants/<work>/table.ledger.json   machine-readable results, merged across runs
+#   tmp/mutants/<work>/mutations.md        the human write-up, regenerated from the ledger
+#   tmp/mutants/<work>/pristine/           byte copies of each target before its first mutation (scratch)
+#
+# A table directly in tmp/mutants/ is refused: that shared folder is where runs overwrote each
+# other's ledgers and pristine copies.
+#
+# Separate folders do not isolate the code. Every run mutates the checkout in place, so a second
+# run in the same checkout loads the first run's mutants and reports garbage, and can capture a
+# mutated file as its "pristine" copy. A mutating run therefore holds tmp/mutants/.run.lock for
+# the checkout. To run two at once, run each in its own worktree.
 #
 # The table file is Ruby whose last expression is a Hash:
 #
@@ -230,6 +240,11 @@ command = table[:command] || "bundle exec rspec"
 timeout_s = (ARGV.include?("--timeout") ? ARGV[ARGV.index("--timeout") + 1] : table[:timeout] || 900).to_i
 
 work_dir = File.dirname(table_path)
+shared_root = File.expand_path("tmp/mutants")
+if File.expand_path(work_dir) == shared_root
+  abort "#{table_path} is in the shared folder #{shared_root}. Move it to tmp/mutants/<work>/table.rb, " \
+        "where <work> names this change, so its ledger and pristine copies stay separate."
+end
 ledger_path = File.join(work_dir, "#{File.basename(table_path, ".rb")}.ledger.json")
 backup_dir = File.join(work_dir, "pristine")
 previous = File.exist?(ledger_path) ? JSON.parse(File.read(ledger_path)) : {}
@@ -285,6 +300,19 @@ if check_only
   puts "Preflight clean: #{mutants.size} anchors resolve uniquely." if problems.empty?
   exit(problems.empty? ? 0 : 1)
 end
+
+# The checkout is shared state, so only one mutating run may hold it. The kernel releases the
+# flock when the process exits, even on a hard kill, so a stale lock file cannot block a later run.
+FileUtils.mkdir_p(shared_root)
+RUN_LOCK = File.open(File.join(shared_root, ".run.lock"), File::RDWR | File::CREAT)
+unless RUN_LOCK.flock(File::LOCK_EX | File::LOCK_NB)
+  holder = RUN_LOCK.read.strip
+  abort "Another mutation run holds this checkout (#{holder.empty? ? "unknown table" : holder}). " \
+        "Wait for it, or run this table in its own worktree."
+end
+RUN_LOCK.truncate(0)
+RUN_LOCK.write("#{table_path} (pid #{Process.pid})")
+RUN_LOCK.flush
 
 timeout_bin = ["timeout", "gtimeout"].find { |b| system("command -v #{b} > /dev/null 2>&1") }
 warn "No timeout binary found; specs will run unbounded." unless timeout_bin
