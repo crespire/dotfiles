@@ -111,6 +111,49 @@ gwt() {
   fi
 }
 
+# Tickets live in one shared TICKETS_DIR, not in each repo, so `tk create` tags
+# every new ticket with the repo it came from. The name comes from the common
+# git dir, not the toplevel, so a worktree gets its parent repo's name.
+# Outside a git repo, `tk create` gets no extra tag.
+tk() {
+  if [[ "$1" != "create" ]]; then
+    command tk "$@"
+    return
+  fi
+
+  local common_dir repo
+  common_dir=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
+  if [[ -z "$common_dir" ]]; then
+    command tk "$@"
+    return
+  fi
+  repo=${common_dir:h:t}
+  [[ "${common_dir:t}" != ".git" ]] && repo=${${common_dir:t}%.git}
+
+  local -a args
+  local tagged=false
+  while (( $# )); do
+    case "$1" in
+      --tags=*)
+        args+=("--tags=$repo,${1#--tags=}")
+        tagged=true
+        ;;
+      --tags)
+        args+=("--tags" "$repo,$2")
+        tagged=true
+        shift
+        ;;
+      *)
+        args+=("$1")
+        ;;
+    esac
+    shift
+  done
+  [[ "$tagged" == false ]] && args+=("--tags" "$repo")
+
+  command tk "${args[@]}"
+}
+
 kill_sidekiq() {
   echo "Killing Sidekiq without waiting for jobs to finish..."
   ps -ef | grep sidekiq | grep -v grep | awk '{print $2}' | xargs kill -9

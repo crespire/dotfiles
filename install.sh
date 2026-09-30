@@ -168,6 +168,7 @@ link_if_exists "$DOTFILES_DIR/.config/.rubocop.yml" "$HOME/.rubocop.yml"
 link_if_exists "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
 link_if_exists "$DOTFILES_DIR/lang-defaults/.default-gems" "$HOME/.default-gems"
 link_if_exists "$DOTFILES_DIR/lang-defaults/.default-npm-packages" "$HOME/.default-npm-packages"
+link_if_exists "$DOTFILES_DIR/.tickets" "$HOME/.tickets"
 
 # XDG config directory - create if needed and symlink specific items
 run mkdir -p "$HOME/.config"
