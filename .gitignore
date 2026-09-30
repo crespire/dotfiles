@@ -44,3 +44,8 @@ lazygit.tar.gz
 # is tracked and its contents are not.
 tmp/*
 !tmp/.keep
+
+# Tickets: local working notes per ticket, exported as TICKETS_DIR. The directory
+# is tracked so install.sh can link it; its contents are not.
+.tickets/*
+!.tickets/.keep
