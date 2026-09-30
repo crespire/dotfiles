@@ -227,10 +227,12 @@ Spotting `sfdc` against `salesforce` is the agent's job, from the catalog.
 tag, since `apply_tags` merges as a union. A tag the operator wrote by hand survives as the
 target rather than being rewritten.
 
-### 5. Regenerate the catalog
+### 5. Rebuild MEMORY.md as an access guide
 
-Rewrites `knowledge/MEMORY.md` as the tag catalog: every tag, its meaning, and its file
-count. The next run reads this before it coins a term.
+Rewrites `knowledge/MEMORY.md` as what a session needs before any memory surfaces: the hard
+rules and working preferences in full, search recipes, writing rules, and the tag catalog
+(every tag, its meaning, its file count). It lists no other memories, because recall matches
+each file's description on its own, so the file stays within its read limit as the store grows.
 
 ### 6. Write the change proposal
 

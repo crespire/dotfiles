@@ -1,6 +1,6 @@
 ---
 name: dream
-description: Consolidate, tag and index the Obsidian knowledge store. Runs nightly; also invocable by hand. Merges machine-written memories into shapes, tags every memory for grep-based recall, and regenerates the tag catalog.
+description: Consolidate, tag and index the Obsidian knowledge store. Runs nightly; also invocable by hand. Merges machine-written memories into shapes, tags every memory for grep-based recall, and rebuilds MEMORY.md as an access guide (rules, search recipes, tag catalog) rather than a list of memories.
 user_invocable: true
 ---
 
@@ -313,18 +313,44 @@ this skill's spelling folds into it. Their vocabulary is not drift to be correct
 `synonyms.rb` proposes the candidates. It reports spelling variants and tags whose file
 coverage matches, and it stays read-only — the fold itself is a judgment.
 
-### 5. Regenerate the catalog
+### 5. Rebuild `MEMORY.md` as an access guide, not a list
 
-Rewrite `knowledge/MEMORY.md` as the tag catalog: every tag in use, what it means, and how
-many files carry it. The catalog is what the next run reads before coining a term, and what
-the user greps to learn what the store knows about.
+`knowledge/MEMORY.md` is loaded into every session, and only its first 200 or so lines. It is
+not how a memory gets recalled: recall matches each file's `description` on its own, so a line
+per memory adds nothing to recall and makes the file grow with the store until it truncates.
+The file holds only what a session needs before any memory has surfaced. Write it in this
+order, and keep it under about 120 lines however large the store gets:
 
-Keep the behavioural sections the catalog already carries — the rules that must be in
-context whether or not anything greps for them.
+1. **Intro.** Where memories live (the territory directories), that files are the system of
+   record, and the frontmatter every memory carries: `description`, and `tags:` with one
+   `scope/`, one `form/` and subject tags.
+2. **Hard rules**, in full, one line each with a link. Rules that must hold whether or not
+   anything is searched for, so they cannot live behind a query.
+3. **How to work**, in full, one line each with a link. The `scope/portable` and
+   `scope/domain` `form/preference` memories: they shape every task, so they are needed before
+   a subject is known. Merge two lines rather than dropping one when this section grows.
+4. **Finding a memory.** Recall surfaces memories by description; when it does not, search.
+   Give the queries as copy-pasteable commands: by subject tag, by client or ticket, patterns
+   for a subject (`form/pattern` plus the subject), recently written (`ls -t`), and free text.
+   Say to search before concluding a subject has no history.
+5. **Writing a memory.** The rules for shape of problem and shape of solution, facts that stay
+   true, linking by filename, and descriptions written in the words a later search would use.
+   State that a new memory gets **no pointer line** in `MEMORY.md`. That overrides the
+   harness's own instruction to add one after every memory, which is what grew the file past
+   its read limit, so the override has to be in the file itself.
+6. **Tag catalog**, last, in the shape step 7 parses (below).
+
+Everything else — `scope/local` memories, `form/artifact` results, standing decisions about one
+codebase — is reached by its description or by a query, and gets no line. Moving a memory out
+of the list is not a loss; confirm the one being unlisted has a description a search for its
+subject would hit, and sharpen it if not (see Tag schema).
 
 **Do not count by hand.** `ruby ~/.claude/scripts/dream/validate.rb --counts` emits every tag
 with its count, already grouped, in the shape below. Step 7 fails the whole run on a single
 wrong number across a hundred-odd tags.
+
+The catalog is what the next run reads before coining a term, and what a session reads to know
+which tags exist before it searches.
 
 **`validate.rb` parses this section, so its shape is a contract.** Under a `## Tag catalog`
 heading, up to the next `## `, write each tag as a backticked name followed by its count in
