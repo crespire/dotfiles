@@ -156,6 +156,7 @@ export DOTFILES_DIR DOTFILES_CACHE DOTFILES_EXTRA_DIR ZDOTDIR
 step "Setting up symlinks..."
 
 # Zsh config files -> home directory
+link_if_exists "$DOTFILES_DIR/.config/zsh/.zshenv" "$HOME/.zshenv"
 link_if_exists "$DOTFILES_DIR/.config/zsh/.zshrc" "$HOME/.zshrc"
 link_if_exists "$DOTFILES_DIR/.config/zsh/.zprofile" "$HOME/.zprofile"
 link_if_exists "$DOTFILES_DIR/.config/zsh/.zsh_aliases" "$HOME/.zsh_aliases"

@@ -1,6 +1,4 @@
-
-export ASDF_GOLANG_MOD_VERSION_ENABLED=true
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+# Interactive setup only. Environment variables live in .zshenv.
 
 # autoload
 autoload -Uz compinit && compinit
@@ -28,49 +26,13 @@ PROMPT='(%T) %F{34}%n%f:%F{32}%4~%f (${vcs_info_msg_0_}) $ '
 # Aliases and things
 source ~/.zsh_aliases
 source ~/.zsh_funcs
-source ~/.zprofile
 
 # Golang via ASDF (source set-env if it exists)
 if [ -f ~/.asdf/plugins/golang/set-env.zsh ]; then
   source ~/.asdf/plugins/golang/set-env.zsh
 fi
 
-# Google Cloud SDK PATH and completions
-if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+# Google Cloud SDK completions
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Move PG tools into path for homebrew cask setup
-if [ -d /opt/homebrew/ ]; then
-  export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
-fi
-
-# asdf version manager setup
-if [ -d /opt/homebrew/ ]; then
-  # macOS with Homebrew (Apple Silicon)
-  export PATH=/opt/homebrew/bin:$PATH
-  if [ -f /opt/homebrew/opt/asdf/libexec/asdf.sh ]; then
-    source /opt/homebrew/opt/asdf/libexec/asdf.sh
-  fi
-elif [ -d /usr/local/Cellar ]; then
-  # macOS with Homebrew (Intel)
-  if [ -f /usr/local/opt/asdf/libexec/asdf.sh ]; then
-    source /usr/local/opt/asdf/libexec/asdf.sh
-  fi
-fi
-
-# Some apps may install to this location regardless of OS, so put it in path
-export PATH="$HOME/.local/bin:$PATH"
-
-# expose asdf shims
-if command -v asdf; then
-  export PATH="$HOME/.asdf/bin:$PATH"
-  export PATH="$HOME/.asdf/shims:$PATH"
-fi
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/crespire/google-cloud-sdk/path.zsh.inc' ]; then . '/home/crespire/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/crespire/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/crespire/google-cloud-sdk/completion.zsh.inc'; fi
