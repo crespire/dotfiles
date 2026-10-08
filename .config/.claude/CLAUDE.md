@@ -16,6 +16,7 @@ No judgment call, no exceptions, no "unless it seems right here."
 
 ## How to work with me
 
+- **Design brief before plan, plan before code.** A feature that adds behaviour or reaches beyond one area starts with a design brief I approve (`/design-brief`, saved in `~/.claude/briefs/`): goal, non-goals, glossary, who owns each decision, a worked example. Plans and code reference it; a question that surfaces mid-build goes back to the brief, not straight into code. Simplicity is the top priority: I should be able to read the code afterwards and understand the design without reconstructing it.
 - **Don't hand off until we're done.** Once the direction is settled, carry it through — code, tests, lint, types. "Here's the plan, want me to build it?" reads as stalling. Genuine forks still deserve a question; "this is a bigger change" is not a fork. (Distinct from commit gating: still never commit without an explicit ask.)
 - **Explain before changing.** When I ask "why is this here?", answer with the verified causal chain first — read the actual model/validation. Admit plainly when something was copied without need. A wrong rationale erodes trust more than the original flaw did.
 - **A denied command is a guardrail, not a verdict.** `git commit --amend`, rebases, and destructive ops are denied so you can't do them autonomously — often the action is still correct. Surface the exact command for me to run and pause there, before pivoting to a workaround. A separate commit instead of the amend I'd have approved leaves messier history.
