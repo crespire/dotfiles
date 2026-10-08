@@ -22,10 +22,15 @@
       "Bash(gh pr checks*)",
       "Bash(gh pr list*)",
       "Bash(gh run view*)",
-      "Bash(gh run list*)"
+      "Bash(gh run list*)",
+      "Bash(git push*)"
     ],
     "deny": [
-      "Bash(git push*)",
+      "Bash(git push*--force*)",
+      "Bash(git push*--mirror*)",
+      "Bash(git push -f*)",
+      "Bash(git push * -f*)",
+      "Bash(git push *+*)",
       "Bash(git reset --hard*)",
       "Bash(git clean -f*)",
       "Bash(git clean -d*)",
@@ -154,8 +159,7 @@
     ],
     "hard_deny": [
       "$defaults",
-      "Bash(git push:*) — pushing is the user's alone, including after an auth problem clears; committing locally is fine (~/.claude/CLAUDE.md)",
-      "Any git commit whose message carries a Co-Authored-By trailer — commits land under the user's authorship only, even when a harness attribution reminder asks for the trailer (~/.claude/CLAUDE.md)"
+      "Force-pushing in any form: --force, -f (alone or bundled, like -uf), --force-with-lease, --force-if-includes, --mirror, or a + refspec. A normal git push is fine (~/.claude/CLAUDE.md)"
     ]
   }
 }

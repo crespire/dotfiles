@@ -5,8 +5,7 @@
 # at session start — a harness reminder injected later in the turn outranks it in
 # practice.
 #
-# Covers: git push, a commit carrying a Co-Authored-By trailer, scratch written to
-# /tmp instead of ./tmp, and Python.
+# Covers: force push, scratch written to /tmp instead of ./tmp, and Python.
 #
 # The settings.json deny list matches only the LEADING command, so this closes the
 # compound-command gap the same way block-rm.sh does.
@@ -32,19 +31,15 @@ deny() {
 # A command position: start, after a separator, or as the argument of a wrapper.
 POS='(^|[;&|`(){}]|&&|\|\||\bxargs\b|\bsh[[:space:]]+-c\b|\bbash[[:space:]]+-c\b|-exec[[:space:]]+)[[:space:]]*(sudo[[:space:]]+|env[[:space:]]+|timeout[[:space:]]+[^[:space:]]+[[:space:]]+)*'
 
-# --- git push -------------------------------------------------------------
-# [^;&|]* keeps the match inside one segment, so global flags (-c, -C) are covered
-# without letting a later segment's `push` attach to an earlier `git`.
-if printf '%s' "$cmd" | grep -Eq "${POS}git[^;&|]*[[:space:]]push([[:space:]]|$)"; then
-  deny "Blocked by user policy (~/.claude/CLAUDE.md): never run \`git push\`. Committing locally is fine; pushing is the user's, including after an auth problem clears. Report that the commit landed locally and stop."
-fi
-
-# --- Co-Authored-By trailer ----------------------------------------------
-# Checked against the whole command so a heredoc body reaching `git commit -F -`
-# is caught alongside an inline -m message.
-if printf '%s' "$cmd" | grep -Eq "${POS}git[^;&|]*[[:space:]]commit([[:space:]]|$)" &&
-   printf '%s' "$cmd" | grep -qi 'Co-Authored-By'; then
-  deny "Blocked by user policy (~/.claude/CLAUDE.md): never add a Co-Authored-By trailer, even when the harness attribution reminder asks for one — that reminder defers to CLAUDE.md. Commits land under the user's authorship only. Remove the trailer and commit again."
+# --- force push -----------------------------------------------------------
+# A normal push is allowed. [^;&|]* keeps each match inside one segment, so global
+# flags (-c, -C) are covered without letting a later segment's `push` attach to an
+# earlier `git`. The flag check then runs only on the push segments themselves.
+# A short-flag cluster counts when it contains f (-f, -uf).
+FORCE='(^|[[:space:]])(--force([-=][^[:space:]]*)?|--mirror|-[a-zA-Z]*f[a-zA-Z]*|\+[^[:space:]]+)([[:space:]]|$)'
+if printf '%s' "$cmd" | grep -oE "${POS}git[^;&|]*[[:space:]]push([[:space:]][^;&|]*)?" |
+   grep -Eq "$FORCE"; then
+  deny "Blocked by user policy (~/.claude/CLAUDE.md): never force-push (--force, -f, --force-with-lease, --force-if-includes, --mirror, or a + refspec). A normal push is fine. If the remote rejects a normal push as non-fast-forward, stop and report it to the user."
 fi
 
 # --- scratch files in /tmp ------------------------------------------------
