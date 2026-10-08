@@ -19,6 +19,10 @@ lazygit.tar.gz
 .config/.claude/skills/dream/state.json
 .config/.claude/skills/dream/last-run.log
 
+# Some agents are not for sharing
+.config/.claude/agents/*
+!.config/.claude/agents/codebase-investigator.md
+
 .DS_Store
 
 

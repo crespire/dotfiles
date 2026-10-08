@@ -94,6 +94,7 @@ Write as a trusted technical partner addressing a counterpart who isn't deep in 
 
 - **Generalize technical references.** "Our source data" not "BigQuery"; "a fix we shipped" not "PR #2404." Ticket IDs, table names, file paths, and internal class names stay in the internal writeup.
 - **Don't preamble explanations.** Cut "here's what's going on" / "let me walk you through this." Just deliver it.
+- **State each claim once.** Drop clarifying tails that restate it ("every sign-in, not just the first one" → "every sign-in"), and give a supporting point one sentence, not two.
 - **Question whether work is needed before offering it.** "Do we need to backfill if you've already corrected on your side?" beats "Happy to run the backfill."
 - **Avoid em-dashes; reshape sentences that want one.** Commas, semicolons, periods, or connectors ("as," "since," "because"). Parenthetical asides get real parentheses or a new sentence.
 
