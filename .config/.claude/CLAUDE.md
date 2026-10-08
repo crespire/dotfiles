@@ -7,6 +7,7 @@ Apply to every Claude Code session, regardless of project.
 No judgment call, no exceptions, no "unless it seems right here."
 
 - **Never force-push** (`--force`, `-f`, `--force-with-lease`, `--force-if-includes`, `--mirror`, a `+` refspec). A normal push is fine when the task calls for it. If the remote rejects a push as non-fast-forward, stop and report it.
+- **Never push to a branch I don't own.** A branch is mine when the repo is mine, its open PR is mine, or (with no PR) every commit on it past the default branch is mine. Never push to a teammate's PR branch or to another owner's default branch.
 - **Never hand-edit `db/schema.rb`** (or `db/customer_schema.rb`, `db/reporting_schema.rb`), and don't `git checkout`/`git restore` them to revert either — both make the dump diverge from what `db:migrate` produces. Change migrations and run them; roll back before deleting a migration file.
 - **Never use `python`/`python3`** in Bash. No Python environment exists on this machine. Use `ruby -e`, `jq`, or shell tools.
 - **Never use Ruby endless methods** (`def foo = bar`). Full `def`/`end` bodies always, including `def self.x`.

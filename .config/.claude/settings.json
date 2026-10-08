@@ -159,7 +159,8 @@
     ],
     "hard_deny": [
       "$defaults",
-      "Force-pushing in any form: --force, -f (alone or bundled, like -uf), --force-with-lease, --force-if-includes, --mirror, or a + refspec. A normal git push is fine (~/.claude/CLAUDE.md)"
+      "Force-pushing in any form: --force, -f (alone or bundled, like -uf), --force-with-lease, --force-if-includes, --mirror, or a + refspec. A normal git push is fine (~/.claude/CLAUDE.md)",
+      "Pushing to a branch the user does not own: a teammate's PR branch, another owner's default branch, or a branch carrying other people's commits. The user owns the branch when the repo is theirs, its open PR is theirs, or every commit on it past the default branch is theirs (~/.claude/CLAUDE.md)"
     ]
   }
 }
