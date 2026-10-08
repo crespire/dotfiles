@@ -26,6 +26,8 @@
 /stats-cache.json
 /.credentials.json
 daemon.log
+/briefs/*
+/uploads/*
 
 # Claude installer (system file, not user config)
 /install.sh
