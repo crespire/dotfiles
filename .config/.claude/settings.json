@@ -149,6 +149,10 @@
   "editorMode": "vim",
   "verbose": false,
   "preferredNotifChannel": "notifications_disabled",
+  "autoCompactEnabled": true,
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80"
+  },
   "skipAutoPermissionPrompt": true,
   "autoMode": {
     "soft_deny": [
