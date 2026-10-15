@@ -12,6 +12,7 @@ No judgment call, no exceptions, no "unless it seems right here."
 - **Never use `python`/`python3`** in Bash. No Python environment exists on this machine. Use `ruby -e`, `jq`, or shell tools.
 - **Never use Ruby endless methods** (`def foo = bar`). Full `def`/`end` bodies always, including `def self.x`.
 - **Never write to `/tmp`** — use `./tmp` (`mkdir -p ./tmp`) so scratch stays visible in the workspace.
+- **Never publish a PR without a local `/review` round first.** Publishing means `gh pr create` (draft or ready) or marking a draft ready. Run `/review` on the branch, present its triage, and settle the blockers with me before the PR goes up. A request to publish, push, or "open the PR" does not skip this. If `/review` is not available in the session, say so and stop.
 - **Never change a prod Postgres session setting with bare `SET`.** Connections are pooled, so the setting rides along to the next query, and a raised query skips the manual `RESET`. Wrap it: `SET LOCAL` inside a transaction ending in `raise ActiveRecord::Rollback`.
 
 ## How to work with me
