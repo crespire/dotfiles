@@ -23,6 +23,7 @@
 
 # Sensitive/local data
 /history.jsonl
+/history/
 /stats-cache.json
 /.credentials.json
 daemon.log

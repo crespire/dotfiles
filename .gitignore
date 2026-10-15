@@ -37,6 +37,7 @@ lazygit.tar.gz
 .config/.claude/daemon-auth-cooldown
 .config/.claude/daemon-auth-status.json
 .config/.claude/policy-limits.json.stamp.json
+.config/.claude/remote-settings.json.synced-at
 .config/.claude/plugins/.last_inuse_sweep
 .config/.claude/plugins/installed_plugins.json
 .config/.claude/plugins/known_marketplaces.json
