@@ -124,9 +124,9 @@ Read the target weekly note file. If it already contains `## PR Summary (<repo-n
 
 ### 10. Append the summary
 
-Find the `---` separator line in the weekly note (the line that is exactly `---` and separates work from personal sections). Insert the PR summary section **immediately before** that `---` line, with a blank line above and below for readability.
+Insert the PR summary section **immediately before** the `### Product Ideas` heading, with a blank line above and below for readability. The summary belongs with the week's work log, above the embedded Product Ideas.
 
-If no `---` separator is found, append the summary to the end of the file.
+If there is no `### Product Ideas` heading, insert it immediately before the `---` separator line (the line that is exactly `---` and separates work from personal sections). If neither exists, append the summary to the end of the file.
 
 ### 11. Report to the user
 
