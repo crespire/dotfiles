@@ -7,6 +7,14 @@ Use the code-reviewer agent if available and review the current branch:
 
 $ARGUMENTS
 
+## Scope: the whole change set, every time
+
+The review covers every commit on the branch since its base, not the last few commits and not the commits since an earlier review. Complexity is incremental: each commit can look fine alone while the branch as a whole gains a third near-copy, a flag for one caller, or a fix that needs another fix. Only a review of the whole change set can see that.
+
+- Find the base first. Use the PR's base branch if a PR exists (`gh pr view --json baseRefName`), else the default branch. A stacked branch's base is the branch it stacks on, not `main`.
+- Review `git diff <base>...HEAD` and read `git log <base>..HEAD`. Give this same range to the code-reviewer agent and to the counter agent below. Never give an agent a narrower range such as `HEAD~3..HEAD`.
+- An instruction such as "review the latest changes" names what is new, not the scope. Still read the whole change set; mark which findings come from the new commits.
+
 When reviewing:
 1. Reference the CLAUDE.md and any supplementary documentation available.
 2. Examine code execution paths, architecture and design patterns for consistency with the existing codebase.
@@ -25,6 +33,9 @@ Using a counter agent devoid of your context and reasoning, have them review the
 5. Does it look like the rest of the app? Sibling jobs, Thor tasks, existing conventions rather than invented ones.
 6. Do the tests describe behaviour a reader would recognise, and do they fail if you break the thing they name?
 7. Is the architecture and design of the code also coherent? Does it fit together in a way that suggests a deliberate design that answers the questions above as well?
+8. Did complexity accumulate across the commits? Read `git log <base>..HEAD` in order and look for additions that each look cheap alone but add up: a third near-copy, a flag or branch for one caller, a fix that needs another fix, a parameter threaded through layers that ignore it, a special case that leaks to its consumers. For each one, name the commits that built it, the symptom it causes (change amplification, cognitive load, or unknown unknowns), and what a fix would cost. Report it even when every single commit is defensible: the user decides whether to fix it now or note it.
+
+Give the counter agent the base and the full range (`<base>...HEAD`), and tell it that the scope is the whole change set.
 
 ## Triage, once the counter agent's findings are back
 
@@ -53,7 +64,7 @@ Present the findings grouped by bucket, for discussion. Do not start making edit
 A review exists to converge a change on its goal. A review whose fixes invite another review, which invites more fixes, is how a two-commit PR becomes thirty-five. Guard against it:
 
 - **Report the size first.** Open the results with the change set's size against its base: commits, files, and lines (`git rev-list --count <base>..HEAD`, `git diff --shortstat <base>...HEAD`), and the commit reviewed (`git rev-parse --short HEAD`). On a re-review, also give the growth since the last reviewed commit.
-- **A re-review reviews the delta.** When this branch has been reviewed before, review only `git diff <last-reviewed>..HEAD`. A finding in code the earlier review already covered is a follow-up unless it is a blocker. Settled code is not reopened because a fresh reader would write it differently.
+- **A re-review reads everything but reopens little.** When this branch has been reviewed before, still review the whole change set (see Scope), and use `git diff <last-reviewed>..HEAD` only to label what is new. A finding confined to code the earlier review already covered is a follow-up unless it is a blocker: settled code is not reopened because a fresh reader would write it differently. A finding about how the new commits interact with settled code (a repeated pattern, a fix on a fix, a concept that now has two owners) is in scope, because that interaction exists only in the new commits.
 - **Prefer fixes that shrink.** Rank the fix options for each finding by their size. Deleting, narrowing, or reverting beats adding. A fix that needs a new file, a new abstraction, or a change to shared code is a follow-up by default, even for a bucket 2 finding.
 - **Stop when it stops converging.** If a round of fixes produced as many new findings as it closed, or the new findings are mostly about the previous round's fixes, do not propose another round. Say so plainly, and recommend moving the open items to follow-ups.
 
