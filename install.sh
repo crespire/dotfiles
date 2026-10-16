@@ -179,6 +179,11 @@ link_if_exists "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
 
 # Claude Code configuration
 link_if_exists "$DOTFILES_DIR/.config/.claude" "$HOME/.claude"
+# Claude Code loads CLAUDE.md from parent directories, so this one file covers every
+# Switch checkout and worktree under ~/repos/switch/.
+if [[ -d "$HOME/repos/switch" ]]; then
+  link_if_exists "$DOTFILES_DIR/switch/CLAUDE.md" "$HOME/repos/switch/CLAUDE.md"
+fi
 
 # =============================================================================
 # Install Packages

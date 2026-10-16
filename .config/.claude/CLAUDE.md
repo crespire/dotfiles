@@ -8,12 +8,10 @@ No judgment call, no exceptions, no "unless it seems right here."
 
 - **Never force-push** (`--force`, `-f`, `--force-with-lease`, `--force-if-includes`, `--mirror`, a `+` refspec). A normal push is fine when the task calls for it. If the remote rejects a push as non-fast-forward, stop and report it.
 - **Never push to a branch I don't own.** A branch is mine when the repo is mine, its open PR is mine, or (with no PR) every commit on it past the default branch is mine. Never push to a teammate's PR branch or to another owner's default branch.
-- **Never hand-edit `db/schema.rb`** (or `db/customer_schema.rb`, `db/reporting_schema.rb`), and don't `git checkout`/`git restore` them to revert either — both make the dump diverge from what `db:migrate` produces. Change migrations and run them; roll back before deleting a migration file.
-- **Never use `python`/`python3`** in Bash. No Python environment exists on this machine. Use `ruby -e`, `jq`, or shell tools.
+- **Never use `python`/`python3`** in Bash. I read Ruby, not Python, and I must be able to inspect the work. Use `ruby -e`, `jq`, or shell tools.
 - **Never use Ruby endless methods** (`def foo = bar`). Full `def`/`end` bodies always, including `def self.x`.
 - **Never write to `/tmp`** — use `./tmp` (`mkdir -p ./tmp`) so scratch stays visible in the workspace.
 - **Never publish a PR without a local `/review` round first.** Publishing means `gh pr create` (draft or ready) or marking a draft ready. Run `/review` on the branch, present its triage, and settle the blockers with me before the PR goes up. A request to publish, push, or "open the PR" does not skip this. If `/review` is not available in the session, say so and stop.
-- **Never change a prod Postgres session setting with bare `SET`.** Connections are pooled, so the setting rides along to the next query, and a raised query skips the manual `RESET`. Wrap it: `SET LOCAL` inside a transaction ending in `raise ActiveRecord::Rollback`.
 
 ## How to work with me
 
@@ -107,12 +105,6 @@ Write as a trusted technical partner addressing a counterpart who isn't deep in 
 - **Avoid em-dashes; reshape sentences that want one.** Commas, semicolons, periods, or connectors ("as," "since," "because"). Parenthetical asides get real parentheses or a new sentence.
 
 The internal-audience version (Slack-friendly, jargon-OK) is a separate artifact, not a substitute.
-
-## Rails console scripting & diagnostics
-
-- **Verify columns, associations, and methods exist before suggesting them.** Read `app/models/*.rb` and `db/schema.rb` (or `db/customer_schema.rb`) — don't guess from convention. When a model has `serialize :data, coder: Switch::X`, the JSONB shape comes from that class, not arbitrary keys. When unsure of column names, dump `record.attributes` and let the schema reveal itself.
-- **Buffer intermediate values.** SQL log output interleaves with return values, so assign each value into one hash, end the block with `nil`, then evaluate the hash.
-- **Show a buffer whole; never chain sub-access.** `buffer` bare on its own line, or `File.write("tmp/…", JSON.pretty_generate(buffer))` and read it back. Never `buffer[:a]; buffer[:b]` — IRB echoes only the last expression and silently swallows the rest.
 
 ## Successive queries — label them
 
