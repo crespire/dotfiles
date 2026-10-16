@@ -325,7 +325,12 @@ order, and keep it under about 120 lines however large the store gets:
    record, and the frontmatter every memory carries: `description`, and `tags:` with one
    `scope/`, one `form/` and subject tags.
 2. **Hard rules**, in full, one line each with a link. Rules that must hold whether or not
-   anything is searched for, so they cannot live behind a query.
+   anything is searched for, so they cannot live behind a query. Leave out every rule that
+   `~/.claude/CLAUDE.md` or `~/repos/switch/CLAUDE.md` already states, and open the section
+   with one line that says the "Never do these" lists in those files apply. CLAUDE.md is the
+   home of a hard rule: it loads as instructions in every session and in subagents, and the
+   hooks cite it. The memory keeps the reason and the incident. A hard rule that exists only
+   in memory goes in the report as a candidate for CLAUDE.md; don't move it yourself.
 3. **How to work**, in full, one line each with a link. The `scope/portable` and
    `scope/domain` `form/preference` memories: they shape every task, so they are needed before
    a subject is known. Merge two lines rather than dropping one when this section grows.

@@ -10,8 +10,14 @@ No judgment call, no exceptions, no "unless it seems right here."
 - **Never push to a branch I don't own.** A branch is mine when the repo is mine, its open PR is mine, or (with no PR) every commit on it past the default branch is mine. Never push to a teammate's PR branch or to another owner's default branch.
 - **Never use `python`/`python3`** in Bash. I read Ruby, not Python, and I must be able to inspect the work. Use `ruby -e`, `jq`, or shell tools.
 - **Never use Ruby endless methods** (`def foo = bar`). Full `def`/`end` bodies always, including `def self.x`.
-- **Never write to `/tmp`** — use `./tmp` (`mkdir -p ./tmp`) so scratch stays visible in the workspace.
+- **Never write to `/tmp`** — use `./tmp` (`mkdir -p ./tmp`) so scratch stays visible in the workspace. The per-session scratchpad Claude Code provides is fine.
 - **Never publish a PR without a local `/review` round first.** Publishing means `gh pr create` (draft or ready) or marking a draft ready. Run `/review` on the branch, present its triage, and settle the blockers with me before the PR goes up. A request to publish, push, or "open the PR" does not skip this. If `/review` is not available in the session, say so and stop.
+- **Never connect to production.** No `bin/kube_console`, `kubectl exec`, container console or any other session against a production cluster, read-only and `--sandbox` included. Production access is mine. Query the local production restore, and hand me a snippet for anything only production has.
+- **Never run a `bq` subcommand other than `bq query`.** Mutation and account-level operations are mine. Read metadata through `INFORMATION_SCHEMA`; surface any other command for me to run.
+- **Never make an unsigned commit.** Plain `git commit` signs through the global config. Don't pass `-c user.name=`/`-c user.email=` overrides. Check a signature with `git cat-file commit <sha> | grep gpgsig`, not `%G?`, which reports N locally.
+- **Never use `eval`** (or `instance_eval`/`binding.eval` with a code string), including fetching a script from GCS to run in a console. I must see the code that runs. Write a long snippet to `./tmp/<topic>/<label>.rb`, check it with `ruby -c`, and give me the path.
+- **Never write `Timeout.timeout`.** It raises into the thread at any line, `ensure` blocks included, and leaves connections, pool checkouts and locks broken. Use the client's own timeout and keep retries low; with no client timeout, raise it as a design question.
+- **Never write `#N` as a list marker or back-reference.** GitHub links `#N` to that issue or PR. Use `N)` or `N.`; `#N` only cites a real issue or PR.
 
 ## How to work with me
 
@@ -23,7 +29,7 @@ No judgment call, no exceptions, no "unless it seems right here."
   - Durable surfaces (schema, persisted formats, public APIs, event payloads) get coherence up front. Ad-hoc there freezes into data.
   - When a change sits on this line, name the call in a sentence, in these terms, so I can overrule it.
 - **Design brief before plan, plan before code.** A feature that adds behaviour or reaches beyond one area starts with a design brief I approve (`/design-brief`, saved in `~/.claude/briefs/`): goal, non-goals, glossary, who owns each decision, a worked example. Plans and code reference it; a question that surfaces mid-build goes back to the brief, not straight into code.
-- **Don't hand off until we're done.** Once the direction is settled, carry it through — code, tests, lint, types. "Here's the plan, want me to build it?" reads as stalling. Genuine forks still deserve a question; "this is a bigger change" is not a fork. (Distinct from commit gating: still never commit without an explicit ask.)
+- **Don't hand off until we're done.** Once the direction is settled, carry it through — code, tests, lint, types. "Here's the plan, want me to build it?" reads as stalling. Genuine forks still deserve a question; "this is a bigger change" is not a fork. Commit each finished piece as we go, and push normally when the task calls for it.
 - **Explain before changing.** When I ask "why is this here?", answer with the verified causal chain first — read the actual model/validation. Admit plainly when something was copied without need. A wrong rationale erodes trust more than the original flaw did.
 - **A denied command is a guardrail, not a verdict.** `git commit --amend`, rebases, and destructive ops are denied so you can't do them autonomously — often the action is still correct. Surface the exact command for me to run and pause there, before pivoting to a workaround. A separate commit instead of the amend I'd have approved leaves messier history.
 - **Use `./`-rooted, project-relative paths everywhere** you display or shell out. Exception: tools whose schema demands absolute paths (`Read`, `Edit`, `Write`, `NotebookEdit`).
